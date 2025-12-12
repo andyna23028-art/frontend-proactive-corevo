@@ -48,6 +48,8 @@
   border-radius: 40px;
   margin-bottom: 24px;
   flex-shrink: 0;
+  object-fit: contain;
+  display: block;
 }
 
 .auth-left h3 {

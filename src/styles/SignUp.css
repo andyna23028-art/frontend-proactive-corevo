@@ -213,6 +213,8 @@
   background: #e0e0e0;
   border-radius: 40px;
   margin-bottom: 32px;
+  object-fit: contain;
+  display: block;
 }
 
 .signup-left h3 {

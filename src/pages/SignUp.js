@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import googleIcon from "../images/google.png";
+import logo from "../images/logo.png";
 import "../styles/SignUp.css";
 
 export default function SignUp() {
@@ -21,7 +22,7 @@ export default function SignUp() {
         <h2 className="brand">Corevo</h2>
 
         <div className="left-center">
-          <div className="mock-shape" />
+          <img src={logo} alt="Corevo logo" className="mock-shape" />
 
           <h3>Your Online Hub for Productivity & Focus</h3>
           <p>
