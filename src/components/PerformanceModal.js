@@ -18,10 +18,10 @@ const MAX_RATING = 5;
 export default function PerformanceModal({ show, handleClose, handleSubmit, initialData }) {
     // State untuk setiap field - initialized dengan nilai kosong/default
     const [employeeName, setEmployeeName] = useState('');
-    const [goalAchievement, setGoalAchievement] = useState(0);
-    const [knowledgeSkills, setKnowledgeSkills] = useState(0);
-    const [behaviorWorkEthic, setBehaviorWorkEthic] = useState(0);
-    const [disciplineReliability, setDisciplineReliability] = useState(0);
+    const [goalAchievement, setGoalAchievement] = useState('');
+    const [knowledgeSkills, setKnowledgeSkills] = useState('');
+    const [behaviorWorkEthic, setBehaviorWorkEthic] = useState('');
+    const [disciplineReliability, setDisciplineReliability] = useState('');
     const [goalAchievementDescription, setGoalAchievementDescription] = useState('');
     const [knowledgeSkillsDescription, setKnowledgeSkillsDescription] = useState('');
     const [behaviorWorkEthicDescription, setBehaviorWorkEthicDescription] = useState('');
@@ -34,10 +34,10 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
             if (initialData) {
                 // Mode Edit
                 setEmployeeName(initialData.employeeName || '');
-                setGoalAchievement(initialData.goalAchievement || 0);
-                setKnowledgeSkills(initialData.knowledgeSkills || 0);
-                setBehaviorWorkEthic(initialData.behaviorWorkEthic || 0);
-                setDisciplineReliability(initialData.disciplineReliability || 0);
+                setGoalAchievement(initialData.goalAchievement !== undefined ? String(initialData.goalAchievement) : '');
+                setKnowledgeSkills(initialData.knowledgeSkills !== undefined ? String(initialData.knowledgeSkills) : '');
+                setBehaviorWorkEthic(initialData.behaviorWorkEthic !== undefined ? String(initialData.behaviorWorkEthic) : '');
+                setDisciplineReliability(initialData.disciplineReliability !== undefined ? String(initialData.disciplineReliability) : '');
                 setGoalAchievementDescription(initialData.goalAchievementDescription || '');
                 setKnowledgeSkillsDescription(initialData.knowledgeSkillsDescription || '');
                 setBehaviorWorkEthicDescription(initialData.behaviorWorkEthicDescription || '');
@@ -45,10 +45,10 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
             } else {
                 // Mode Create - reset semua
                 setEmployeeName('');
-                setGoalAchievement(0);
-                setKnowledgeSkills(0);
-                setBehaviorWorkEthic(0);
-                setDisciplineReliability(0);
+                setGoalAchievement('');
+                setKnowledgeSkills('');
+                setBehaviorWorkEthic('');
+                setDisciplineReliability('');
                 setGoalAchievementDescription('');
                 setKnowledgeSkillsDescription('');
                 setBehaviorWorkEthicDescription('');
@@ -138,7 +138,8 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
                                     <Form.Control
                                         type="number"
                                         value={goalAchievement}
-                                        onChange={(e) => setGoalAchievement(parseInt(e.target.value) || 0)}
+                                        placeholder="points"
+                                        onChange={(e) => setGoalAchievement(e.target.value.replace(/[^0-9]/g, ''))}
                                         required
                                         min={0}
                                         max={5}
@@ -174,7 +175,8 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
                                     <Form.Control
                                         type="number"
                                         value={behaviorWorkEthic}
-                                        onChange={(e) => setBehaviorWorkEthic(parseInt(e.target.value) || 0)}
+                                        placeholder="points"
+                                        onChange={(e) => setBehaviorWorkEthic(e.target.value.replace(/[^0-9]/g, ''))}
                                         required
                                         min={0}
                                         max={5}
@@ -210,7 +212,8 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
                                     <Form.Control
                                         type="number"
                                         value={knowledgeSkills}
-                                        onChange={(e) => setKnowledgeSkills(parseInt(e.target.value) || 0)}
+                                        placeholder="points"
+                                        onChange={(e) => setKnowledgeSkills(e.target.value.replace(/[^0-9]/g, ''))}
                                         required
                                         min={0}
                                         max={5}
@@ -246,7 +249,8 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
                                     <Form.Control
                                         type="number"
                                         value={disciplineReliability}
-                                        onChange={(e) => setDisciplineReliability(parseInt(e.target.value) || 0)}
+                                        placeholder="points"
+                                        onChange={(e) => setDisciplineReliability(e.target.value.replace(/[^0-9]/g, ''))}
                                         required
                                         min={0}
                                         max={5}
