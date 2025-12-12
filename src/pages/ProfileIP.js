@@ -198,24 +198,33 @@ const ProfileIP = () => {
                         <h1 className="h1 profile-title-custom" style={{ marginBottom: 4 }}>My Profile</h1>
                         <p className="p-header profile-desc-custom" style={{ marginBottom: 0 }}>Manage your personal information and preferences</p>
                     </div>
-                    {!isEditing && (
-                        <div style={{ display: 'flex', gap: 12 }}>
+                    <div style={{ display: 'flex', gap: 12 }}>
+                        {isEditing ? (
+                            <>
+                                <button className="btn-base btn-secondary" onClick={handleCancelClick}>
+                                    Cancel
+                                </button>
+                                <button className="btn-base btn-primary" onClick={handleSaveClick}>
+                                    Save Changes
+                                </button>
+                            </>
+                        ) : (
                             <button className="btn-base btn-primary btn-edit-custom" onClick={handleEditClick}>
                                 Edit Profile
                             </button>
-                            <div style={{ position: 'relative' }}>
-                                <button className="btn-base btn-secondary btn-logout-custom" onClick={handleLogout} ref={logoutButtonRef}>
-                                    Log Out
-                                </button>
-                                <ConfirmationModal 
-                                    show={showLogoutModal} 
-                                    onConfirm={confirmLogout} 
-                                    onCancel={() => setShowLogoutModal(false)}
-                                    modalRef={modalRef} 
-                                />
-                            </div>
+                        )}
+                        <div style={{ position: 'relative' }}>
+                            <button className="btn-base btn-secondary btn-logout-custom" onClick={handleLogout} ref={logoutButtonRef}>
+                                Log Out
+                            </button>
+                            <ConfirmationModal 
+                                show={showLogoutModal} 
+                                onConfirm={confirmLogout} 
+                                onCancel={() => setShowLogoutModal(false)}
+                                modalRef={modalRef} 
+                            />
                         </div>
-                    )}
+                    </div>
                 </section>
 
                 {/* Profile Card */}
@@ -233,27 +242,95 @@ const ProfileIP = () => {
                         <div
                             className="emp-badge"
                             style={{ backgroundColor: "#EBF4FF", color: "#424242" }}
-                            >
+                        >
                             {displayData.employeeId}
-                            </div>
+                        </div>
                     </div>
                     <div className="profile-main profile-main-custom">
                         <div className="profile-headline profile-headline-custom">
-                            <h2 className="profile-name profile-name-custom">{displayData.name}</h2>
-                            <p className="profile-position profile-position-custom">{displayData.position}</p>
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={tempProfileData.name ?? displayData.name}
+                                    onChange={handleInputChange}
+                                    className="profile-edit-input profile-name-input"
+                                    style={{ fontWeight: 700, fontSize: 28, lineHeight: '32px', marginBottom: 2, width: '100%', border: '1px solid #e0e0e0', borderRadius: 8, padding: '6px 10px' }}
+                                />
+                            ) : (
+                                <h2 className="profile-name profile-name-custom" style={{ lineHeight: '32px' }}>{displayData.name}</h2>
+                            )}
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    name="position"
+                                    value={tempProfileData.position ?? displayData.position}
+                                    onChange={handleInputChange}
+                                    className="profile-edit-input profile-position-input"
+                                    style={{ fontWeight: 500, fontSize: 18, color: '#1976d2', lineHeight: '24px', marginBottom: 2, width: '100%', border: '1px solid #e0e0e0', borderRadius: 8, padding: '6px 10px' }}
+                                />
+                            ) : (
+                                <p className="profile-position profile-position-custom" style={{ lineHeight: '24px' }}>{displayData.position}</p>
+                            )}
                         </div>
                         <div className="profile-meta profile-meta-custom">
                             <div className="profile-meta-item profile-meta-item-custom">
-                                {displayData.department && <span className="icon-meta"><img src={departemenIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>} {displayData.department}
+                                <span className="icon-meta"><img src={departemenIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="department"
+                                        value={tempProfileData.department ?? displayData.department}
+                                        onChange={handleInputChange}
+                                        className="profile-edit-input profile-meta-input"
+                                        style={{ width: 160, border: '1px solid #e0e0e0', borderRadius: 6, padding: '4px 8px' }}
+                                    />
+                                ) : (
+                                    displayData.department
+                                )}
                             </div>
                             <div className="profile-meta-item profile-meta-item-custom">
-                                {displayData.location && <span className="icon-meta"><img src={lokasiIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>} {displayData.location}
+                                <span className="icon-meta"><img src={lokasiIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        value={tempProfileData.location ?? displayData.location}
+                                        onChange={handleInputChange}
+                                        className="profile-edit-input profile-meta-input"
+                                        style={{ width: 140, border: '1px solid #e0e0e0', borderRadius: 6, padding: '4px 8px' }}
+                                    />
+                                ) : (
+                                    displayData.location
+                                )}
                             </div>
                             <div className="profile-meta-item profile-meta-item-custom">
-                                {displayData.joinedDate && <span className="icon-meta"><img src={kalenderIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>} Joined {displayData.joinedDate}
+                                <span className="icon-meta"><img src={kalenderIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="joinedDate"
+                                        value={tempProfileData.joinedDate ?? displayData.joinedDate}
+                                        onChange={handleInputChange}
+                                        className="profile-edit-input profile-meta-input"
+                                        style={{ width: 130, border: '1px solid #e0e0e0', borderRadius: 6, padding: '4px 8px' }}
+                                    />
+                                ) : (
+                                    <>Joined {displayData.joinedDate}</>
+                                )}
                             </div>
                         </div>
-                        <p className="profile-bio profile-bio-custom">{displayData.bio}</p>
+                        {isEditing ? (
+                            <textarea
+                                name="bio"
+                                value={tempProfileData.bio ?? displayData.bio}
+                                onChange={handleInputChange}
+                                className="profile-edit-input profile-bio-input"
+                                style={{ width: '100%', minHeight: 64, marginTop: 8, fontSize: 15, lineHeight: '22px', border: '1px solid #e0e0e0', borderRadius: 8, padding: '8px 10px' }}
+                            />
+                        ) : (
+                            <p className="profile-bio profile-bio-custom" style={{ lineHeight: '22px' }}>{displayData.bio}</p>
+                        )}
                     </div>
                     {/* Profile Actions */}
                     {isEditing && (
