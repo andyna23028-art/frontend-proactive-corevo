@@ -1,107 +1,82 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import googleIcon from '../images/google.png';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import googleIcon from "../images/google.png";
+import "../styles/Auth.css";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
-  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      alert('Please enter email and password');
-      return;
-    }
-
-    localStorage.setItem('token', 'dummy-token');
-    navigate('/home');
-  };
-
-  const handleGoogleSignIn = () => {
-    window.location.href = 'http://localhost:5000/auth/google';
+    if (!email || !password) return;
+    localStorage.setItem("token", "dummy-token");
+    navigate("/home");
   };
 
   return (
-    <div className="bg-light d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={5} className="bg-white p-4 rounded shadow-sm">
-            <h4 className="fw-bold mb-4 text-center">
-              <span className="text-dark">Welcome </span>
-              <span className="text-primary">Back</span>
-            </h4>
+    <div className="auth-page">
+      {/* LEFT */}
+      <div className="auth-left">
+        <h2 className="brand">Corevo</h2>
 
-            <Button
-              variant="outline-dark"
-              className="w-100 mb-3 d-flex align-items-center justify-content-center gap-2"
-              onClick={handleGoogleSignIn}
-            >
-              <img src={googleIcon} alt="Google" width="20" />
-              Sign in with Google
-            </Button>
+        <div className="left-center">
+          <div className="mock-shape" />
+          <h3>
+            Your Online Hub for <br /> Productivity & Focus
+          </h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt.
+          </p>
+        </div>
+      </div>
 
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Form.Group>
+      {/* RIGHT */}
+      <div className="auth-right">
+        <div className="auth-card">
+          <h2>
+            Welcome <span>Back</span>
+          </h2>
 
-              <Form.Group className="mb-3 position-relative">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <span
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '10px',
-                    transform: 'translateY(-50%)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </span>
-              </Form.Group>
+          <button className="google-btn">
+            <img src={googleIcon} alt="Google" />
+            Sign in with Google
+          </button>
 
-              <Form.Group className="mb-4 d-flex align-items-center">
-                <Form.Check
-                  type="checkbox"
-                  label="Keep me logged in"
-                  checked={keepLoggedIn}
-                  onChange={(e) => setKeepLoggedIn(e.target.checked)}
-                />
-              </Form.Group>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-              <Button variant="primary" type="submit" className="w-100 fw-bold">
-                SIGN IN
-              </Button>
-            </Form>
-
-            <div className="text-center mt-3">
-              <span className="text-muted">Need an account? </span>
-              <Link to="/signup" className="text-decoration-none text-primary fw-semibold">
-                CREATE ONE
-              </Link>
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <span onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
             </div>
-          </Col>
-        </Row>
-      </Container>
+
+            <button type="submit" className="auth-btn">
+              SIGN IN
+            </button>
+          </form>
+
+          <p className="auth-footer">
+            Need an account? <Link to="/signup">CREATE ONE</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

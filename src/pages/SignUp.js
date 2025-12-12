@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import googleIcon from '../images/google.png';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import googleIcon from "../images/google.png";
+import "../styles/SignUp.css";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,96 +11,78 @@ export default function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/signin');
-  };
-
-  const handleGoogleSignUp = () => {
-    window.location.href = 'http://localhost:5000/auth/google';
+    navigate("/signin");
   };
 
   return (
-    <div className="bg-light d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={5} className="bg-white p-4 rounded shadow-sm">
-            <h4 className="fw-bold mb-4 text-center">
-              Start A Productive Journey and Unlock Your Full Potential
-            </h4>
+    <div className="signup-page">
+      {/* LEFT PANEL */}
+      <div className="signup-left">
+        <h2 className="brand">Corevo</h2>
 
-            <Button
-              variant="outline-dark"
-              className="w-100 mb-3 d-flex align-items-center justify-content-center gap-2"
-              onClick={handleGoogleSignUp}
-            >
-              <img src={googleIcon} alt="Google" width="20" />
-              Sign up with Google
-            </Button>
+        <div className="left-center">
+          <div className="mock-shape" />
 
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label>Username</Form.Label>
-                <Form.Control type="text" placeholder="Enter your username" />
-              </Form.Group>
+          <h3>Your Online Hub for Productivity & Focus</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt.
+          </p>
+        </div>
+      </div>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" placeholder="Enter your email" />
-              </Form.Group>
+      {/* RIGHT PANEL */}
+      <div className="signup-right">
+        <div className="signup-card">
+          <h2>
+            Start A <span>Productive</span> Journey <br />
+            and Unlock Your Full Potential
+          </h2>
 
-              <Form.Group className="mb-3 position-relative">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
-                />
-                <span
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '10px',
-                    transform: 'translateY(-50%)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </span>
-              </Form.Group>
+          <button className="google-btn">
+            <img src={googleIcon} alt="Google" />
+            Sign up with Google
+          </button>
 
-              <Form.Group className="mb-4 position-relative">
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control
-                  type={showConfirm ? 'text' : 'password'}
-                  placeholder="Confirm your password"
-                />
-                <span
-                  onClick={() => setShowConfirm(!showConfirm)}
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '10px',
-                    transform: 'translateY(-50%)',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {showConfirm ? <FaEye /> : <FaEyeSlash />}
-                </span>
-              </Form.Group>
+          <form onSubmit={handleSubmit}>
+            <label>Username</label>
+            <input type="text" placeholder="Username" />
 
-              <Button variant="primary" type="submit" className="w-100 fw-bold">
-                SIGN UP
-              </Button>
-            </Form>
+            <label>Email</label>
+            <input type="email" placeholder="Email" />
 
-            <div className="text-center mt-3">
-              <span className="text-muted">Own an Account? </span>
-              <Link to="/signin" className="text-decoration-none text-primary fw-semibold">
-                JUMP RIGHT IN
-              </Link>
+            <label>Password</label>
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+              />
+              <span onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
             </div>
-          </Col>
-        </Row>
-      </Container>
+
+            <label>Confirm Password</label>
+            <div className="password-field">
+              <input
+                type={showConfirm ? "text" : "password"}
+                placeholder="Confirm Password"
+              />
+              <span onClick={() => setShowConfirm(!showConfirm)}>
+                {showConfirm ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>
+
+            <button type="submit" className="signup-btn">
+              SIGN UP
+            </button>
+          </form>
+
+          <p className="signin-link">
+            Own an Account? <Link to="/signin">JUMP RIGHT IN</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
