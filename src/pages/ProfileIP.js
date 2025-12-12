@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import AppNavbar from '../components/Navbar';
-// 🌟 BARU: Impor file CSS
+import { useNavigate } from "react-router-dom"; // ✅ IMPORT useNavigate
 import '../styles/ProfileIP.css'; 
 
 // Data Awal untuk Profil
@@ -20,7 +20,7 @@ const initialProfileData = {
 };
 
 // --- COMPONENTS ---
-// 🌟 Component Pembantu (Menggunakan ClassName)
+// Component Pembantu (Menggunakan ClassName)
 const ProfileInfoItem = ({ label, icon, value, name, isEditing, onChange }) => (
     <div className="info-item">
         <div className="info-label">
@@ -42,7 +42,7 @@ const ProfileInfoItem = ({ label, icon, value, name, isEditing, onChange }) => (
     </div>
 );
 
-// 🌟 Component Notifikasi (Menggunakan ClassName)
+// Component Notifikasi (Menggunakan ClassName)
 const NotificationBox = ({ message, type }) => {
     if (!message) return null;
 
@@ -65,7 +65,7 @@ const NotificationBox = ({ message, type }) => {
     );
 };
 
-// 🌟 BARU: Component Konfirmasi Logout
+// Component Konfirmasi Logout
 const ConfirmationModal = ({ show, onConfirm, onCancel, modalRef }) => {
     if (!show) return null;
 
@@ -96,14 +96,16 @@ const ConfirmationModal = ({ show, onConfirm, onCancel, modalRef }) => {
 
 // --- MAIN COMPONENT ---
 const ProfileIP = () => {
+    // 🌟 INIT useNavigate
+    const navigate = useNavigate(); 
+    
     const [activeTab, setActiveTab] = useState("personal");
     const [isEditing, setIsEditing] = useState(false);
     const [profileData, setProfileData] = useState(initialProfileData);
     const [tempProfileData, setTempProfileData] = useState({});
     const [notification, setNotification] = useState(null);
-    // State untuk konfirmasi logout
+    
     const [showLogoutModal, setShowLogoutModal] = useState(false); 
-    // Ref untuk tombol Logout (untuk deteksi klik luar)
     const logoutButtonRef = useRef(null);
     const modalRef = useRef(null);
 
@@ -111,12 +113,9 @@ const ProfileIP = () => {
         if (isEditing) setTempProfileData(profileData);
     }, [isEditing, profileData]);
 
-    // 🌟 BARU: Handle klik di luar modal untuk menutupnya (Popover Behavior)
+    // Handle klik di luar modal untuk menutupnya
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // Tutup modal jika modal terlihat DAN:
-            // 1. Yang diklik BUKAN tombol logout (untuk menghindari menutup segera setelah dibuka)
-            // 2. Yang diklik BUKAN bagian dari modal itu sendiri
             if (showLogoutModal && 
                 logoutButtonRef.current && 
                 !logoutButtonRef.current.contains(event.target) && 
@@ -127,14 +126,12 @@ const ProfileIP = () => {
             }
         };
 
-        // Tambahkan event listener saat modal terbuka
         document.addEventListener("mousedown", handleClickOutside);
         
-        // Hapus event listener saat komponen unmount atau modal tertutup
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [showLogoutModal]); // Dependensi pada showLogoutModal
+    }, [showLogoutModal]); 
 
     const handleEditClick = () => {
         setIsEditing(true);
@@ -160,22 +157,25 @@ const ProfileIP = () => {
         setTempProfileData((prev) => ({ ...prev, [name]: value }));
     };
     
-    // 🌟 BARU: Logika Logout
+    // Logika Toggle Modal Logout
     const handleLogout = () => {
         setShowLogoutModal(prev => !prev);
     };
 
+    // 🌟 LOGIKA UTAMA LOGOUT DAN REDIRECT
     const confirmLogout = () => {
         setShowLogoutModal(false);
-        // Implementasi Log Out sesungguhnya (misalnya, redirect ke halaman login)
-        alert("Anda telah berhasil Log Out (Simulasi)"); 
-        // Window.location.href = '/login'; // Contoh implementasi nyata
+        
+        // Logika Log Out di sini (misalnya, menghapus token sesi)
+        console.log("User logged out."); 
+        
+        // 🔥 PERBAIKAN: Menggunakan '/' yang merupakan path untuk <LandingPage /> di App.js
+        navigate('/'); 
     };
 
     const displayData = isEditing ? tempProfileData : profileData;
 
     return (
-        // Menggunakan className
         <div className="page-container">
             <AppNavbar isLoggedIn={true} activePage="Profile" />
 
@@ -227,7 +227,6 @@ const ProfileIP = () => {
                                 </button>
                             </>
                         ) : (
-                            // 🌟 BARU: Tambahkan tombol Log Out di mode non-edit
                             <>
                                 <button className="btn-base btn-primary" onClick={handleEditClick}>
                                     Edit Profile
@@ -240,7 +239,7 @@ const ProfileIP = () => {
                                     show={showLogoutModal} 
                                     onConfirm={confirmLogout} 
                                     onCancel={() => setShowLogoutModal(false)}
-                                    modalRef={modalRef} // Pass the modal ref
+                                    modalRef={modalRef} 
                                 />
                                 </div>
                             </>

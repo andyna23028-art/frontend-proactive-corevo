@@ -1,12 +1,13 @@
 // src/pages/FunSessionWelcome.js --> employee
 import React, { useState, useRef } from "react";
 import { Container, Card, Row, Col, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; 
 import AppNavbar from "../components/Navbar";
 import { CheckCircleFill } from "react-bootstrap-icons";
 import "../styles/FunSession.css"; 
 
 // --- 1. IMPORT SEMUA GAMBAR EMOSI DI SINI ---
-// Pastikan nama file di sini sesuai dengan nama file Anda di folder src/images/
+// Pastikan path ini benar di folder Anda
 import energeticImage from "../images/energetic.png"; 
 import happyImage from "../images/happy.png";
 import neutralImage from "../images/neutral.png";
@@ -28,7 +29,6 @@ const MOODS = [
 // --- Komponen Mood Card ---
 const MoodCard = ({ mood, isSelected, onClick }) => {
     return (
-        // <Col xs={6} sm={4} md={4} className="mb-3 d-flex justify-content-center">
             <Card
                 className={`text-center mood-card mood-card-compact ${isSelected ? "mood-selected" : ""}`}
                 onClick={() => onClick(mood.name)}
@@ -52,18 +52,17 @@ const MoodCard = ({ mood, isSelected, onClick }) => {
 
 // --- Komponen Halaman Utama ---
 export default function FunSessionWelcome() {
-    // Default mood diatur null atau sesuai kebutuhan, tapi di desain adalah 'Tired'
+    const navigate = useNavigate(); // Hook untuk navigasi
+
+    // Default mood diatur 'Tired' sesuai permintaan desain awal
     const [selectedMood, setSelectedMood] = useState('Tired'); 
     const [showMoodToast, setShowMoodToast] = useState(false);
 
-    // State baru untuk section "Welcome Back!"
+    // State untuk Form Kedua (Setelah Game)
     const [showWelcomeBack, setShowWelcomeBack] = useState(false);
-    // State baru untuk mood kedua
     const [selectedMoodAfterGame, setSelectedMoodAfterGame] = useState(null);
-    // State baru untuk notifikasi setelah game
     const [showThanksToast, setShowThanksToast] = useState(false);
 
-    // Ref untuk menunjuk ke lokasi scroll
     const welcomeBackRef = useRef(null);
 
     const handleMoodSelect = (moodName) => {
@@ -76,30 +75,26 @@ export default function FunSessionWelcome() {
         }, 3000);
     };
 
-    // Fungsi baru untuk handle klik Play Games Now
+    // Fungsi untuk handle klik Play Games Now
     const handlePlayGamesNow = () => {
-        // Asumsi: Redirect ke games platform, lalu kembali ke sini dan memicu tampilan form kedua
-        // Untuk simulasi: Langsung tampilkan form kedua dan scroll
-        
         // 1. Tampilkan section "Welcome Back!"
         setShowWelcomeBack(true);
-        // 2. Set mood kedua menjadi null (belum memilih)
-        setSelectedMoodAfterGame(null);
-        // 3. Scroll ke section "Welcome Back!"
+        setSelectedMoodAfterGame(null); 
+        
+        // 2. Scroll ke section "Welcome Back!"
         setTimeout(() => {
-            // Pengecekan current sebelum scrollIntoView
             if (welcomeBackRef.current) { 
                 welcomeBackRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }, 100);
     };
 
-    // Fungsi baru untuk handle pemilihan mood setelah game
+    // Fungsi untuk handle pemilihan mood setelah game
     const handleMoodSelectAfterGame = (moodName) => {
         setSelectedMoodAfterGame(moodName);
     };
 
-    // Fungsi baru untuk handle klik Done
+    // Fungsi untuk handle klik Done (TERMASUK REDIRECT)
     const handleDone = () => {
         if (!selectedMoodAfterGame) {
             alert("Please select your mood first.");
@@ -109,13 +104,14 @@ export default function FunSessionWelcome() {
         // 1. Tampilkan notifikasi "Thanks for sharing!"
         setShowThanksToast(true);
 
-        // 2. Sembunyikan notifikasi setelah 3 detik
+        // 2. Sembunyikan notifikasi setelah 3 detik DAN navigasi kembali
         setTimeout(() => {
             setShowThanksToast(false);
+            
+            // 🔥 NAVIGASI KEMBALI KE HALAMAN FUNSESSION EMPLOYEE
+            // Mengasumsikan path untuk FunSessionEmployee adalah '/funsession'
+            navigate('/funsession-employee'); 
         }, 3000);
-        
-        // Opsional: Sembunyikan section "Welcome Back!" setelah selesai
-        // setShowWelcomeBack(false); 
     };
 
     return (
@@ -128,7 +124,7 @@ export default function FunSessionWelcome() {
                     Engage with your team through games and discussions
                 </p>
 
-                {/* Bagian Pemilihan Mood */}
+                {/* Bagian Pemilihan Mood PERTAMA */}
                 <div className="mood-selection-box-wrapper">
                 <div className="p-4 rounded-3 shadow-sm mb-5 mood-selection-box">
                     <h5 className="fw-semibold mb-4 text-center">How Are You Feeling Today?</h5>
@@ -147,7 +143,7 @@ export default function FunSessionWelcome() {
                 </div>
                 </div>
                 
-                {/* Notifikasi Mood (Diaktifkan jika ada mood yang terpilih) */}
+                {/* Notifikasi Mood PERTAMA (Setelah memilih mood awal) */}
                 {showMoodToast && selectedMood && (
                     <div 
                         className="mood-toast"
@@ -185,7 +181,7 @@ export default function FunSessionWelcome() {
                         variant="primary" 
                         size="lg" 
                         className="fun-play-btn"
-                        onClick={handlePlayGamesNow} // Ubah onClick
+                        onClick={handlePlayGamesNow} 
                     >
                         Play Games Now
                     </Button>
@@ -209,7 +205,6 @@ export default function FunSessionWelcome() {
                                         <MoodCard
                                             key={mood.name}
                                             mood={mood}
-                                            // Menggunakan state baru untuk pemilihan mood setelah game
                                             isSelected={selectedMoodAfterGame === mood.name} 
                                             onClick={handleMoodSelectAfterGame}
                                         />
@@ -225,7 +220,7 @@ export default function FunSessionWelcome() {
                                         <Button
                                             variant="primary"
                                             className="btn-sm"
-                                            onClick={handleDone} // Panggil fungsi Done
+                                            onClick={handleDone} 
                                         >
                                             Done
                                         </Button>
