@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Modal, Form, Button, Row, Col } from 'react-bootstrap'; // Import Row dan Col
-import { XLg, ChevronUp, ChevronDown } from 'react-bootstrap-icons'; 
+import React, { useState, useEffect } from 'react';
+import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
+import { XLg, ChevronUp, ChevronDown } from 'react-bootstrap-icons';
 
-// Data Karyawan Dummy
 const EMPLOYEE_OPTIONS = [
     { id: 1, name: 'Rayn Reynolds' },
     { id: 2, name: 'John Doe' },
@@ -14,38 +13,62 @@ const EMPLOYEE_OPTIONS = [
     { id: 8, name: 'Thomas Herve' },
 ];
 
-// Data Default untuk mode Create (tidak digunakan lagi karena menggunakan state terpisah)
-// const DEFAULT_FORM_DATA = { ... }
-
-// 🌟 KONSTANTA: Batas maksimum nilai penilaian
-const MAX_RATING = 5; 
+const MAX_RATING = 5;
 
 export default function PerformanceModal({ show, handleClose, handleSubmit, initialData }) {
-    
-    // Gunakan state terpisah untuk setiap field - lebih stabil dan tidak re-render
-    const [employeeName, setEmployeeName] = useState(initialData?.employeeName || '');
-    const [goalAchievement, setGoalAchievement] = useState(initialData?.goalAchievement || 0);
-    const [knowledgeSkills, setKnowledgeSkills] = useState(initialData?.knowledgeSkills || 0);
-    const [behaviorWorkEthic, setBehaviorWorkEthic] = useState(initialData?.behaviorWorkEthic || 0);
-    const [disciplineReliability, setDisciplineReliability] = useState(initialData?.disciplineReliability || 0);
-    const [goalAchievementDescription, setGoalAchievementDescription] = useState(initialData?.goalAchievementDescription || '');
-    const [knowledgeSkillsDescription, setKnowledgeSkillsDescription] = useState(initialData?.knowledgeSkillsDescription || '');
-    const [behaviorWorkEthicDescription, setBehaviorWorkEthicDescription] = useState(initialData?.behaviorWorkEthicDescription || '');
-    const [disciplineReliabilityDescription, setDisciplineReliabilityDescription] = useState(initialData?.disciplineReliabilityDescription || '');
+    // State untuk setiap field - initialized dengan nilai kosong/default
+    const [employeeName, setEmployeeName] = useState('');
+    const [goalAchievement, setGoalAchievement] = useState(0);
+    const [knowledgeSkills, setKnowledgeSkills] = useState(0);
+    const [behaviorWorkEthic, setBehaviorWorkEthic] = useState(0);
+    const [disciplineReliability, setDisciplineReliability] = useState(0);
+    const [goalAchievementDescription, setGoalAchievementDescription] = useState('');
+    const [knowledgeSkillsDescription, setKnowledgeSkillsDescription] = useState('');
+    const [behaviorWorkEthicDescription, setBehaviorWorkEthicDescription] = useState('');
+    const [disciplineReliabilityDescription, setDisciplineReliabilityDescription] = useState('');
     const [validated, setValidated] = useState(false);
+
+    // Load data hanya sekali saat modal dibuka
+    useEffect(() => {
+        if (show) {
+            if (initialData) {
+                // Mode Edit
+                setEmployeeName(initialData.employeeName || '');
+                setGoalAchievement(initialData.goalAchievement || 0);
+                setKnowledgeSkills(initialData.knowledgeSkills || 0);
+                setBehaviorWorkEthic(initialData.behaviorWorkEthic || 0);
+                setDisciplineReliability(initialData.disciplineReliability || 0);
+                setGoalAchievementDescription(initialData.goalAchievementDescription || '');
+                setKnowledgeSkillsDescription(initialData.knowledgeSkillsDescription || '');
+                setBehaviorWorkEthicDescription(initialData.behaviorWorkEthicDescription || '');
+                setDisciplineReliabilityDescription(initialData.disciplineReliabilityDescription || '');
+            } else {
+                // Mode Create - reset semua
+                setEmployeeName('');
+                setGoalAchievement(0);
+                setKnowledgeSkills(0);
+                setBehaviorWorkEthic(0);
+                setDisciplineReliability(0);
+                setGoalAchievementDescription('');
+                setKnowledgeSkillsDescription('');
+                setBehaviorWorkEthicDescription('');
+                setDisciplineReliabilityDescription('');
+            }
+            setValidated(false);
+        }
+    }, [show]); // Hanya trigger saat show berubah
 
     const onSubmit = (e) => {
         e.preventDefault();
         const form = e.currentTarget;
-        
+
         if (form.checkValidity() === false) {
             e.stopPropagation();
             setValidated(true);
             return;
         }
 
-        // Kumpulkan semua data
-        const formData = {
+        handleSubmit({
             employeeName,
             goalAchievement,
             knowledgeSkills,
@@ -55,96 +78,12 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
             knowledgeSkillsDescription,
             behaviorWorkEthicDescription,
             disciplineReliabilityDescription,
-        };
+        });
 
-        handleSubmit(formData);
         handleClose();
     };
 
-    // Deteksi Mode dan Teks Tombol
     const isEditMode = !!initialData;
-    const saveButtonText = isEditMode ? 'Save Changes' : 'Save';
-
-    // Style kustom untuk input yang ada spinner-nya
-    const customInputStyle = {
-        backgroundColor: '#eff6ff', 
-        borderRadius: '10px', 
-        border: 'none', 
-        height: '43px',
-        fontSize: '1rem',
-        fontWeight: '500',
-        paddingRight: '40px', 
-    };
-    
-    // Komponen Input dengan Spinner dan Description
-    const RatingGroup = ({ labelValue, valueState, setValue, labelDescription, descriptionState, setDescription }) => (
-        <Row className="mb-4">
-            {/* Kolom Kiri untuk Nilai (Value) */}
-            <Col md={6}>
-                <Form.Group className="mb-3" controlId={`form${labelValue}`}>
-                    <Form.Label className="fw-semibold text-dark">{labelValue}</Form.Label>
-                    <div className="position-relative">
-                        <Form.Control
-                            type="number"
-                            value={valueState}
-                            onChange={(e) => setValue(parseInt(e.target.value) || 0)}
-                            style={customInputStyle}
-                            required 
-                            min={0}
-                            max={MAX_RATING}
-                        />
-                        <div 
-                            className="position-absolute d-flex flex-column" 
-                            style={{ 
-                                right: '5px', 
-                                top: '50%', 
-                                transform: 'translateY(-50%)',
-                                zIndex: 100, 
-                                pointerEvents: 'auto' 
-                            }}>
-                            
-                            <ChevronUp 
-                                size={20} 
-                                className="text-primary cursor-pointer p-1" 
-                                style={{ cursor: 'pointer', lineHeight: '1', height: '20px' }}
-                                onClick={() => {
-                                    const newVal = Math.min(MAX_RATING, valueState + 1);
-                                    setValue(newVal);
-                                }}
-                            />
-                            
-                            <ChevronDown 
-                                size={20} 
-                                className="text-primary cursor-pointer p-1" 
-                                style={{ cursor: 'pointer', lineHeight: '1', height: '20px', marginTop: '-15px' }}
-                                onClick={() => {
-                                    const newVal = Math.max(0, valueState - 1);
-                                    setValue(newVal);
-                                }}
-                            />
-                        </div>
-                    </div>
-                    <Form.Control.Feedback type="invalid">
-                        Nilai harus di antara 0 dan {MAX_RATING}.
-                    </Form.Control.Feedback>
-                </Form.Group>
-            </Col>
-
-            {/* Kolom Kanan untuk Deskripsi */}
-            <Col md={6}>
-                <Form.Group className="mb-3" controlId={`form${labelDescription}`}>
-                    <Form.Label className="fw-semibold text-dark">{labelDescription}</Form.Label>
-                    <Form.Control 
-                        as="textarea" 
-                        rows={3}
-                        value={descriptionState}
-                        onChange={(e) => setDescription(e.target.value)}
-                        style={{ ...customInputStyle, height: 'auto', paddingRight: '10px' }}
-                    />
-                </Form.Group>
-            </Col>
-        </Row>
-    );
 
     return (
         <Modal 
@@ -168,89 +107,180 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
             
             <Modal.Body style={{ padding: '0 1.5rem 1rem 1.5rem' }}>
                 <p className="text-muted mb-4">Employee performance is typically evaluated based on the following key categories</p>
-                
-                <Form noValidate validated={validated} onSubmit={onSubmit}> 
-                    
+
+                <Form noValidate validated={validated} onSubmit={onSubmit}>
                     {/* Select Employee */}
-                    <Form.Group className="mb-4" controlId="formEmployeeName">
+                    <Form.Group className="mb-4">
                         <Form.Label className="fw-semibold text-dark">Select Employee</Form.Label>
-                        <Form.Select 
+                        <Form.Select
                             value={employeeName}
                             onChange={(e) => setEmployeeName(e.target.value)}
                             required
-                            disabled={isEditMode} 
+                            disabled={isEditMode}
                             style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', height: '43px', fontSize: '1rem' }}
                         >
-                            <option value="" disabled>Pilih Karyawan...</option>
-                            {EMPLOYEE_OPTIONS.map(employee => (
-                                <option key={employee.id} value={employee.name}>{employee.name}</option>
+                            <option value="">Pilih Karyawan...</option>
+                            {EMPLOYEE_OPTIONS.map((employee) => (
+                                <option key={employee.id} value={employee.name}>
+                                    {employee.name}
+                                </option>
                             ))}
                         </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                            Mohon pilih karyawan terlebih dahulu.
-                        </Form.Control.Feedback>
+                        <Form.Control.Feedback type="invalid">Mohon pilih karyawan terlebih dahulu.</Form.Control.Feedback>
                     </Form.Group>
 
-                    {/* Performance Metrics with Descriptions */}
-                    <RatingGroup 
-                        labelValue="Goal Achievement Value" 
-                        valueState={goalAchievement}
-                        setValue={setGoalAchievement}
-                        labelDescription="Description"
-                        descriptionState={goalAchievementDescription}
-                        setDescription={setGoalAchievementDescription}
-                    />
+                    {/* Goal Achievement */}
+                    <Row className="mb-4">
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Goal Achievement Value</Form.Label>
+                                <div className="position-relative">
+                                    <Form.Control
+                                        type="number"
+                                        value={goalAchievement}
+                                        onChange={(e) => setGoalAchievement(parseInt(e.target.value) || 0)}
+                                        required
+                                        min={0}
+                                        max={5}
+                                        style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', height: '43px', fontSize: '1rem', fontWeight: '500', paddingRight: '40px' }}
+                                    />
+                                    <div className="position-absolute d-flex flex-column" style={{ right: '5px', top: '50%', transform: 'translateY(-50%)', zIndex: 100 }}>
+                                        <ChevronUp size={20} className="text-primary" style={{ cursor: 'pointer' }} onClick={() => setGoalAchievement(Math.min(5, goalAchievement + 1))} />
+                                        <ChevronDown size={20} className="text-primary" style={{ cursor: 'pointer', marginTop: '-15px' }} onClick={() => setGoalAchievement(Math.max(0, goalAchievement - 1))} />
+                                    </div>
+                                </div>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    value={goalAchievementDescription}
+                                    onChange={(e) => setGoalAchievementDescription(e.target.value)}
+                                    style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', fontSize: '1rem', padding: '0.75rem' }}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
 
-                    <RatingGroup 
-                        labelValue="Behavior & Work Ethic Value" 
-                        valueState={behaviorWorkEthic}
-                        setValue={setBehaviorWorkEthic}
-                        labelDescription="Description"
-                        descriptionState={behaviorWorkEthicDescription}
-                        setDescription={setBehaviorWorkEthicDescription}
-                    />
+                    {/* Behavior & Work Ethic */}
+                    <Row className="mb-4">
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Behavior & Work Ethic Value</Form.Label>
+                                <div className="position-relative">
+                                    <Form.Control
+                                        type="number"
+                                        value={behaviorWorkEthic}
+                                        onChange={(e) => setBehaviorWorkEthic(parseInt(e.target.value) || 0)}
+                                        required
+                                        min={0}
+                                        max={5}
+                                        style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', height: '43px', fontSize: '1rem', fontWeight: '500', paddingRight: '40px' }}
+                                    />
+                                    <div className="position-absolute d-flex flex-column" style={{ right: '5px', top: '50%', transform: 'translateY(-50%)', zIndex: 100 }}>
+                                        <ChevronUp size={20} className="text-primary" style={{ cursor: 'pointer' }} onClick={() => setBehaviorWorkEthic(Math.min(5, behaviorWorkEthic + 1))} />
+                                        <ChevronDown size={20} className="text-primary" style={{ cursor: 'pointer', marginTop: '-15px' }} onClick={() => setBehaviorWorkEthic(Math.max(0, behaviorWorkEthic - 1))} />
+                                    </div>
+                                </div>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    value={behaviorWorkEthicDescription}
+                                    onChange={(e) => setBehaviorWorkEthicDescription(e.target.value)}
+                                    style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', fontSize: '1rem', padding: '0.75rem' }}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
 
-                    <RatingGroup 
-                        labelValue="Knowledge & Skill Value" 
-                        valueState={knowledgeSkills}
-                        setValue={setKnowledgeSkills}
-                        labelDescription="Description"
-                        descriptionState={knowledgeSkillsDescription}
-                        setDescription={setKnowledgeSkillsDescription}
-                    />
+                    {/* Knowledge & Skill */}
+                    <Row className="mb-4">
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Knowledge & Skill Value</Form.Label>
+                                <div className="position-relative">
+                                    <Form.Control
+                                        type="number"
+                                        value={knowledgeSkills}
+                                        onChange={(e) => setKnowledgeSkills(parseInt(e.target.value) || 0)}
+                                        required
+                                        min={0}
+                                        max={5}
+                                        style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', height: '43px', fontSize: '1rem', fontWeight: '500', paddingRight: '40px' }}
+                                    />
+                                    <div className="position-absolute d-flex flex-column" style={{ right: '5px', top: '50%', transform: 'translateY(-50%)', zIndex: 100 }}>
+                                        <ChevronUp size={20} className="text-primary" style={{ cursor: 'pointer' }} onClick={() => setKnowledgeSkills(Math.min(5, knowledgeSkills + 1))} />
+                                        <ChevronDown size={20} className="text-primary" style={{ cursor: 'pointer', marginTop: '-15px' }} onClick={() => setKnowledgeSkills(Math.max(0, knowledgeSkills - 1))} />
+                                    </div>
+                                </div>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    value={knowledgeSkillsDescription}
+                                    onChange={(e) => setKnowledgeSkillsDescription(e.target.value)}
+                                    style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', fontSize: '1rem', padding: '0.75rem' }}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
 
-                    <RatingGroup 
-                        labelValue="Discipline & Reliability Value" 
-                        valueState={disciplineReliability}
-                        setValue={setDisciplineReliability}
-                        labelDescription="Description"
-                        descriptionState={disciplineReliabilityDescription}
-                        setDescription={setDisciplineReliabilityDescription}
-                    />
-
-
-                    {/* Button Submit (hidden) */}
-                    <div style={{ display: 'none' }}>
-                        <Button type="submit">Hidden Submit</Button>
-                    </div>
-
+                    {/* Discipline & Reliability */}
+                    <Row className="mb-4">
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Discipline & Reliability Value</Form.Label>
+                                <div className="position-relative">
+                                    <Form.Control
+                                        type="number"
+                                        value={disciplineReliability}
+                                        onChange={(e) => setDisciplineReliability(parseInt(e.target.value) || 0)}
+                                        required
+                                        min={0}
+                                        max={5}
+                                        style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', height: '43px', fontSize: '1rem', fontWeight: '500', paddingRight: '40px' }}
+                                    />
+                                    <div className="position-absolute d-flex flex-column" style={{ right: '5px', top: '50%', transform: 'translateY(-50%)', zIndex: 100 }}>
+                                        <ChevronUp size={20} className="text-primary" style={{ cursor: 'pointer' }} onClick={() => setDisciplineReliability(Math.min(5, disciplineReliability + 1))} />
+                                        <ChevronDown size={20} className="text-primary" style={{ cursor: 'pointer', marginTop: '-15px' }} onClick={() => setDisciplineReliability(Math.max(0, disciplineReliability - 1))} />
+                                    </div>
+                                </div>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label className="fw-semibold text-dark">Description</Form.Label>
+                                <Form.Control
+                                    as="textarea"
+                                    rows={3}
+                                    value={disciplineReliabilityDescription}
+                                    onChange={(e) => setDisciplineReliabilityDescription(e.target.value)}
+                                    style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', fontSize: '1rem', padding: '0.75rem' }}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
                 </Form>
             </Modal.Body>
-            
+
             <Modal.Footer style={{ borderTop: 'none', padding: '0 1.5rem 1.5rem 1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
-                <Button 
-                    variant="light" 
-                    onClick={handleClose} 
-                    style={{ borderRadius: '10px', color: '#2563eb', border: '1px solid #dbeafe', padding: '0.5rem 1.5rem', marginRight: '10px' }}
-                >
+                <Button variant="light" onClick={handleClose} style={{ borderRadius: '10px', color: '#2563eb', border: '1px solid #dbeafe', padding: '0.5rem 1.5rem', marginRight: '10px' }}>
                     Cancel
                 </Button>
-                <Button 
-                    variant="primary" 
-                    onClick={onSubmit} 
-                    style={{ borderRadius: '10px', padding: '0.5rem 1.5rem', fontWeight: 'bold' }}
-                >
-                    {saveButtonText} 
+                <Button variant="primary" onClick={onSubmit} style={{ borderRadius: '10px', padding: '0.5rem 1.5rem', fontWeight: 'bold' }}>
+                    {isEditMode ? 'Save Changes' : 'Save'}
                 </Button>
             </Modal.Footer>
         </Modal>
