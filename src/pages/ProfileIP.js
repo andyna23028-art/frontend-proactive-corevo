@@ -188,16 +188,38 @@ const ProfileIP = () => {
     const displayData = isEditing ? tempProfileData : profileData;
 
     return (
+
         <div className="page-container">
             <AppNavbar isLoggedIn={true} activePage="Profile" />
             <div className="wrapper profile-wrapper-custom">
-                {/* Header */}
-                <section className="header header-custom">
-                    <h1 className="h1 profile-title-custom">My Profile</h1>
-                    <p className="p-header profile-desc-custom">Manage your personal information and preferences</p>
+                {/* Header + Actions */}
+                <section className="header header-custom" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 0 }}>
+                    <div>
+                        <h1 className="h1 profile-title-custom" style={{ marginBottom: 4 }}>My Profile</h1>
+                        <p className="p-header profile-desc-custom" style={{ marginBottom: 0 }}>Manage your personal information and preferences</p>
+                    </div>
+                    {!isEditing && (
+                        <div style={{ display: 'flex', gap: 12 }}>
+                            <button className="btn-base btn-primary btn-edit-custom" onClick={handleEditClick}>
+                                Edit Profile
+                            </button>
+                            <div style={{ position: 'relative' }}>
+                                <button className="btn-base btn-secondary btn-logout-custom" onClick={handleLogout} ref={logoutButtonRef}>
+                                    Log Out
+                                </button>
+                                <ConfirmationModal 
+                                    show={showLogoutModal} 
+                                    onConfirm={confirmLogout} 
+                                    onCancel={() => setShowLogoutModal(false)}
+                                    modalRef={modalRef} 
+                                />
+                            </div>
+                        </div>
+                    )}
                 </section>
 
                 {/* Profile Card */}
+                <div style={{ height: 28 }} />
                 <section className="profile-card profile-card-custom">
                     <div className="profile-left profile-left-custom">
                         <div className="avatar-large avatar-large-custom">
@@ -234,35 +256,16 @@ const ProfileIP = () => {
                         <p className="profile-bio profile-bio-custom">{displayData.bio}</p>
                     </div>
                     {/* Profile Actions */}
-                    <div className="profile-actions profile-actions-custom">
-                        {isEditing ? (
-                            <>
-                                <button className="btn-base btn-secondary" onClick={handleCancelClick}>
-                                    Cancel
-                                </button>
-                                <button className="btn-base btn-primary" onClick={handleSaveClick}>
-                                    Save Changes
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <button className="btn-base btn-primary btn-edit-custom" onClick={handleEditClick}>
-                                    Edit Profile
-                                </button>
-                                <div style={{ position: 'relative' }}>
-                                    <button className="btn-base btn-secondary btn-logout-custom" onClick={handleLogout} ref={logoutButtonRef}>
-                                        Log Out
-                                    </button>
-                                    <ConfirmationModal 
-                                        show={showLogoutModal} 
-                                        onConfirm={confirmLogout} 
-                                        onCancel={() => setShowLogoutModal(false)}
-                                        modalRef={modalRef} 
-                                    />
-                                </div>
-                            </>
-                        )}
-                    </div>
+                    {isEditing && (
+                        <div className="profile-actions profile-actions-custom">
+                            <button className="btn-base btn-secondary" onClick={handleCancelClick}>
+                                Cancel
+                            </button>
+                            <button className="btn-base btn-primary" onClick={handleSaveClick}>
+                                Save Changes
+                            </button>
+                        </div>
+                    )}
                 </section>
 
                 {/* Custom Toggle Tabs */}
