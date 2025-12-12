@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Container,
   Row,
@@ -52,6 +52,7 @@ export default function Reward() {
   const [showModal, setShowModal] = useState(false);
   const [showNotif, setShowNotif] = useState(false);
   const [notifMessage, setNotifMessage] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('All');
 
   const [form, setForm] = useState({
     department: '',
@@ -120,19 +121,47 @@ export default function Reward() {
 
   const employeesForSelectedDept = EMPLOYEES_BY_DEPT[form.department] || [];
 
-  const RewardTypeCard = ({ icon, title, description }) => (
-    <Card className="shadow-sm border-0 h-100 mb-3">
-      <Card.Body className="d-flex align-items-start">
-        <div className="me-3 p-3 rounded-3" style={{ backgroundColor: '#eff6ff' }}>
-          {icon}
-        </div>
-        <div>
-          <h6 className="fw-bold mb-1">{title}</h6>
-          <p className="text-muted small mb-0">{description}</p>
-        </div>
-      </Card.Body>
-    </Card>
-  );
+  // Filter data penghargaan berdasarkan pilihan
+  const filteredAwards = useMemo(() => {
+    if (selectedFilter === 'All') {
+      return recentAwards;
+    }
+    return recentAwards.filter(award => award.award === selectedFilter);
+  }, [selectedFilter, recentAwards]);
+
+  // Fungsi untuk mengubah filter
+  const handleFilterChange = (awardType) => {
+    if (selectedFilter === awardType) {
+      setSelectedFilter('All');
+    } else {
+      setSelectedFilter(awardType);
+    }
+  };
+
+  const RewardTypeCard = ({ icon, title, description, selected, onClick }) => {
+    const cardStyle = {
+      backgroundColor: '#eff6ff',
+      border: selected ? '2px solid #3B82F6' : '1px solid #C9DFFF',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      borderRadius: '12px',
+      boxShadow: selected ? '0 4px 10px rgba(59, 130, 246, 0.2)' : 'none',
+    };
+
+    return (
+      <Card className="h-100 mb-3" style={cardStyle} onClick={() => onClick(title)}>
+        <Card.Body className="d-flex align-items-start">
+          <div className="me-3 p-3 rounded-3" style={{ backgroundColor: '#C9DFFF' }}>
+            {icon}
+          </div>
+          <div>
+            <h6 className="fw-bold mb-1">{title}</h6>
+            <p className="text-muted small mb-0">{description}</p>
+          </div>
+        </Card.Body>
+      </Card>
+    );
+  };
 
   const RecentAwardItem = ({ award }) => (
     <div className="d-flex align-items-start p-3 border-bottom">
@@ -179,6 +208,8 @@ export default function Reward() {
               icon={<HandThumbsUp size={24} className="text-primary" />}
               title="Best Employee"
               description="Recognizing the employee with outstanding performance and exceptional results throughout the quarter."
+              selected={selectedFilter === 'Best Employee'}
+              onClick={handleFilterChange}
             />
           </Col>
           <Col md={6}>
@@ -186,17 +217,30 @@ export default function Reward() {
               icon={<PersonSquare size={24} className="text-primary" />}
               title="Most Active Employee"
               description="Awarded to the employee who shows the highest level of engagement, participation, and enthusiasm during the period."
+              selected={selectedFilter === 'Most Active Employee'}
+              onClick={handleFilterChange}
             />
           </Col>
         </Row>
 
         {/* Recent Awards */}
-        <h4 className="fw-bold mb-3">Recent Employees Have Been Awarded</h4>
+        <h4 className="fw-bold mb-3">
+          Recent Employees Have Been Awarded
+          {selectedFilter !== 'All' && (
+            <span className="badge bg-primary ms-2 fs-6">{selectedFilter}</span>
+          )}
+        </h4>
         <Card className="shadow border-0">
           <Card.Body className="p-0">
-            {recentAwards.map((award) => (
-              <RecentAwardItem key={award.id} award={award} />
-            ))}
+            {filteredAwards.length > 0 ? (
+              filteredAwards.map((award) => (
+                <RecentAwardItem key={award.id} award={award} />
+              ))
+            ) : (
+              <p className="text-center text-muted p-4 mb-0">
+                No recent awards found for the selected category.
+              </p>
+            )}
           </Card.Body>
         </Card>
       </Container>
