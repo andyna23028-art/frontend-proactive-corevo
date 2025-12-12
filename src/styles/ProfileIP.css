@@ -1,3 +1,258 @@
+/* Header row: judul dan tombol sejajar */
+.profile-header-row-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 16px;
+}
+.header-custom {
+    margin-bottom: 0;
+    flex: 1;
+}
+.profile-actions-header-custom {
+    display: flex;
+    gap: 12px;
+    margin-top: 0;
+    align-items: center;
+    flex-shrink: 0;
+}
+/* --- CUSTOM PROFILE PAGE DESIGN (MATCH FIGMA/IMAGE) --- */
+.profile-wrapper-custom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 40px 0;
+}
+
+.header-custom {
+  margin-bottom: 18px;
+}
+.profile-title-custom {
+    font-size: 2.1rem;
+    font-weight: 700;
+    margin-bottom: 0.2em;
+    color: #181818;
+}
+.profile-desc-custom {
+    font-size: 1.08rem;
+    color: #444;
+    margin-bottom: 0;
+}
+
+.profile-card-custom {
+    border: 1px solid #1880ff;
+    border-radius: 20px;
+    box-shadow: none;
+    padding: 32px 32px 24px 32px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    background: #fff;
+}
+.profile-left-custom {
+    margin-right: 0;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.avatar-large-custom {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 0 0 2px #1880ff;
+    margin-bottom: 0.7em;
+}
+.avatar-img-custom {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.emp-badge-custom {
+    background: #e8f4ff;
+    color: #1880ff;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 4px 18px;
+    margin-top: 10px;
+    box-shadow: none;
+}
+.profile-main-custom {
+    flex: 1;
+    min-width: 0;
+}
+.profile-headline-custom {
+    margin-bottom: 0.2em;
+}
+.profile-name-custom {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+    color: #181818;
+}
+.profile-position-custom {
+    color: #444;
+    font-size: 1.08rem;
+    font-weight: 400;
+    margin-bottom: 0.5em;
+}
+.profile-meta-custom {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    color: #222;
+    font-size: 1.01rem;
+}
+.profile-meta-item-custom {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #222;
+    font-size: 1.01rem;
+}
+.icon-meta {
+    font-size: 1.1em;
+    margin-right: 2px;
+}
+.profile-bio-custom {
+    color: #222;
+    font-size: 1.01rem;
+    margin-top: 0.2em;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+.profile-actions-custom {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    display: flex;
+    gap: 12px;
+}
+.btn-edit-custom {
+    min-width: 120px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 8px 22px;
+    border-radius: 8px;
+}
+.btn-logout-custom {
+    min-width: 90px;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: 8px;
+}
+
+/* Toggle Tabs */
+.profile-toggle-tabs-custom {
+    margin-bottom: 18px;
+}
+.toggle-pill-bg-custom {
+    background: #1880ff;
+    border-radius: 999px;
+    padding: 2px;
+    display: flex;
+    width: fit-content;
+    box-shadow: none;
+}
+.toggle-btn-custom {
+    font-size: 15px;
+    font-weight: 500;
+    padding: 6px 18px;
+    border-radius: 999px;
+    color: #fff;
+    background: transparent;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+}
+.toggle-btn-active-custom {
+    background: #fff;
+    color: #1880ff;
+    box-shadow: none;
+}
+
+/* Info Card */
+.info-card-custom {
+    border: 1px solid #1880ff;
+    border-radius: 18px;
+    box-shadow: none;
+    background: #fff;
+    padding: 28px 32px 24px 32px;
+    margin-bottom: 0;
+}
+.info-title-custom {
+    font-size: 1.13rem;
+    font-weight: 700;
+    color: #181818;
+    margin-bottom: 18px;
+}
+.info-grid-custom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 0;
+}
+.info-item {
+    margin-bottom: 0;
+}
+.info-label {
+    color: #222;
+    font-size: 1.01rem;
+    margin-bottom: 2px;
+    font-weight: 500;
+}
+.info-value {
+    color: #444;
+    font-size: 1.01rem;
+    font-weight: 400;
+    padding: 0;
+}
+.info-input {
+    font-size: 1.01rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+/* --- Custom Toggle Tabs (Pill Style) --- */
+.profile-toggle-tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+}
+
+.toggle-pill-bg {
+    background: #007bff;
+    border-radius: 999px;
+    padding: 2px;
+    display: flex;
+    width: fit-content;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.toggle-btn {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 6px 18px 6px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    outline: none;
+}
+
+.toggle-btn-active {
+    background: #fff;
+    color: #007bff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.toggle-btn:not(.toggle-btn-active):hover {
+    background: rgba(255,255,255,0.12);
+}
 /* src/pages/ProfileIP.css */
 
 /* --- Variabel Warna --- */

@@ -178,45 +178,40 @@ const ProfileIP = () => {
     return (
         <div className="page-container">
             <AppNavbar isLoggedIn={true} activePage="Profile" />
-
-            <div className="wrapper">
+            <div className="wrapper profile-wrapper-custom">
                 {/* Header */}
-                <section className="header">
-                    <h1 className="h1">My Profile</h1>
-                    <p className="p-header">Manage your personal information and preferences</p>
+                <section className="header header-custom">
+                    <h1 className="h1 profile-title-custom">My Profile</h1>
+                    <p className="p-header profile-desc-custom">Manage your personal information and preferences</p>
                 </section>
 
                 {/* Profile Card */}
-                <section className="profile-card">
-                    <div className="profile-left">
-                        <div className="avatar-large">
+                <section className="profile-card profile-card-custom">
+                    <div className="profile-left profile-left-custom">
+                        <div className="avatar-large avatar-large-custom">
                             <img
                                 src={require("../images/woman.png")}
                                 alt={displayData.name}
-                                className="avatar-img"
+                                className="avatar-img avatar-img-custom"
                             />
                             {isEditing && <div className="upload-icon">📸</div>}
                         </div>
-                        <div className="emp-badge">{displayData.employeeId}</div>
+                        <div className="emp-badge emp-badge-custom">{displayData.employeeId}</div>
                     </div>
-
-                    <div className="profile-main">
-                        <div className="profile-headline">
-                            <h2 className="profile-name">{displayData.name}</h2>
-                            <p className="profile-position">{displayData.position}</p>
+                    <div className="profile-main profile-main-custom">
+                        <div className="profile-headline profile-headline-custom">
+                            <h2 className="profile-name profile-name-custom">{displayData.name}</h2>
+                            <p className="profile-position profile-position-custom">{displayData.position}</p>
                         </div>
-
-                        <div className="profile-meta">
-                            <div className="profile-meta-item">👥 {displayData.department}</div>
-                            <div className="profile-meta-item">📍 {displayData.location}</div>
-                            <div className="profile-meta-item">📅 Joined {displayData.joinedDate}</div>
+                        <div className="profile-meta profile-meta-custom">
+                            <div className="profile-meta-item profile-meta-item-custom">{displayData.department && <span className="icon-meta">👥</span>} {displayData.department}</div>
+                            <div className="profile-meta-item profile-meta-item-custom">{displayData.location && <span className="icon-meta">📍</span>} {displayData.location}</div>
+                            <div className="profile-meta-item profile-meta-item-custom">{displayData.joinedDate && <span className="icon-meta">📅</span>} Joined {displayData.joinedDate}</div>
                         </div>
-
-                        <p className="profile-bio">{displayData.bio}</p>
+                        <p className="profile-bio profile-bio-custom">{displayData.bio}</p>
                     </div>
-
                     {/* Profile Actions */}
-                    <div className="profile-actions">
+                    <div className="profile-actions profile-actions-custom">
                         {isEditing ? (
                             <>
                                 <button className="btn-base btn-secondary" onClick={handleCancelClick}>
@@ -228,48 +223,48 @@ const ProfileIP = () => {
                             </>
                         ) : (
                             <>
-                                <button className="btn-base btn-primary" onClick={handleEditClick}>
+                                <button className="btn-base btn-primary btn-edit-custom" onClick={handleEditClick}>
                                     Edit Profile
                                 </button>
                                 <div style={{ position: 'relative' }}>
-                                <button className="btn-base btn-secondary" onClick={handleLogout} ref={logoutButtonRef}>
-                                    Log Out
-                                </button>
-                                <ConfirmationModal 
-                                    show={showLogoutModal} 
-                                    onConfirm={confirmLogout} 
-                                    onCancel={() => setShowLogoutModal(false)}
-                                    modalRef={modalRef} 
-                                />
+                                    <button className="btn-base btn-secondary btn-logout-custom" onClick={handleLogout} ref={logoutButtonRef}>
+                                        Log Out
+                                    </button>
+                                    <ConfirmationModal 
+                                        show={showLogoutModal} 
+                                        onConfirm={confirmLogout} 
+                                        onCancel={() => setShowLogoutModal(false)}
+                                        modalRef={modalRef} 
+                                    />
                                 </div>
                             </>
                         )}
-                        
                     </div>
                 </section>
 
-                {/* Tabs */}
-                <section className="profile-tabs">
-                    <button
-                        className={`tab-base ${activeTab === "personal" ? "tab-active" : ""}`}
-                        onClick={() => setActiveTab("personal")}
-                    >
-                        Personal Info
-                    </button>
-
-                    <button
-                        className={`tab-base ${activeTab === "work" ? "tab-active" : ""}`}
-                        onClick={() => setActiveTab("work")}
-                    >
-                        Work Details
-                    </button>
+                {/* Custom Toggle Tabs */}
+                <section className="profile-toggle-tabs profile-toggle-tabs-custom">
+                    <div className="toggle-pill-bg toggle-pill-bg-custom">
+                        <button
+                            className={`toggle-btn toggle-btn-custom ${activeTab === "personal" ? "toggle-btn-active toggle-btn-active-custom" : ""}`}
+                            onClick={() => setActiveTab("personal")}
+                        >
+                            Personal Info
+                        </button>
+                        <button
+                            className={`toggle-btn toggle-btn-custom ${activeTab === "work" ? "toggle-btn-active toggle-btn-active-custom" : ""}`}
+                            onClick={() => setActiveTab("work")}
+                        >
+                            Work Details
+                        </button>
+                    </div>
                 </section>
 
                 {/* Konten Tab */}
                 {activeTab === "personal" && (
-                    <section className="info-card">
-                        <h3 className="info-title">Personal Information</h3>
-                        <div className="info-grid">
+                    <section className="info-card info-card-custom">
+                        <h3 className="info-title info-title-custom">Personal Information</h3>
+                        <div className="info-grid info-grid-custom">
                             <ProfileInfoItem label="Email Address" icon="✉️" value={displayData.email} name="email" isEditing={isEditing} onChange={handleInputChange} />
                             <ProfileInfoItem label="Phone Number" icon="📞" value={displayData.phone} name="phone" isEditing={isEditing} onChange={handleInputChange} />
                             <ProfileInfoItem label="Date of Birth" icon="🎂" value={displayData.dob} name="dob" isEditing={isEditing} onChange={handleInputChange} />
@@ -279,9 +274,9 @@ const ProfileIP = () => {
                 )}
 
                 {activeTab === "work" && (
-                    <section className="info-card">
-                        <h3 className="info-title">Work Details</h3>
-                        <div className="info-grid">
+                    <section className="info-card info-card-custom">
+                        <h3 className="info-title info-title-custom">Work Details</h3>
+                        <div className="info-grid info-grid-custom">
                             <ProfileInfoItem label="Job Title" value={displayData.position} name="position" isEditing={isEditing} onChange={handleInputChange} />
                             <ProfileInfoItem label="Department" value={displayData.department} name="department" isEditing={isEditing} onChange={handleInputChange} />
                             <ProfileInfoItem label="Manager" value={displayData.manager} name="manager" isEditing={isEditing} onChange={handleInputChange} />
@@ -290,7 +285,6 @@ const ProfileIP = () => {
                     </section>
                 )}
             </div>
-
             <NotificationBox message={notification?.message} type={notification?.type} />
         </div>
     );
