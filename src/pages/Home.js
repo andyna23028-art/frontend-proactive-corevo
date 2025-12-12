@@ -327,7 +327,7 @@ export default function Home() {
                     {/* Tombol Join */}
                     <Button
                       as={Link}
-                      to="/funsession/1"
+                      to="/funsession"
                       size="sm"
                       style={styles.sessionJoinBtn}
                       className="fw-bold"

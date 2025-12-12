@@ -7,7 +7,7 @@ import {
   Button,
   Form,
 } from 'react-bootstrap';
-import { HandThumbsUp, PersonSquare } from 'react-bootstrap-icons';
+import { HandThumbsUp, PersonSquare, Check } from 'react-bootstrap-icons';
 import AppNavbar from '../components/Navbar';
 
 const DEPARTMENTS = ['Human Resources', 'Finance', 'Engineering', 'Procurement'];
