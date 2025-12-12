@@ -1,282 +1,272 @@
-// src/pages/FunSessionWelcomeHRD.js --> HRD/Manager View (Dashboard Visual)
 import React, { useState } from "react";
-import { Container, Card, Row, Col, Button, ProgressBar, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Card,
+  Row,
+  Col,
+  Button,
+  ProgressBar,
+  Form,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import AppNavbar from "../components/Navbar";
-import { ArrowLeftCircle } from "react-bootstrap-icons";
-import { Link } from "react-router-dom"; 
 import "../styles/FunSession.css";
 
-// --- 1. IMPORT SEMUA GAMBAR EMOSI DI SINI ---
-// Pastikan path dan nama file gambar ini benar
-import energeticImage from "../images/energetic.png"; 
+/* ===== IMAGES ===== */
+import energeticImage from "../images/energetic.png";
 import happyImage from "../images/happy.png";
 import neutralImage from "../images/neutral.png";
 import sadImage from "../images/sad.png";
 import tiredImage from "../images/tired.png";
 import frustratedImage from "../images/frustrated.png";
 
-
-// Data Emosi/Mood
+/* ===== MOODS ===== */
 const MOODS = [
-    { name: "Energetic", image: energeticImage }, 
-    { name: "Happy", image: happyImage },
-    { name: "Neutral", image: neutralImage },
-    { name: "Sad", image: sadImage },
-    { name: "Tired", image: tiredImage }, 
-    { name: "Frustrated", image: frustratedImage },
+  { name: "Energetic", image: energeticImage },
+  { name: "Happy", image: happyImage },
+  { name: "Neutral", image: neutralImage },
+  { name: "Sad", image: sadImage },
+  { name: "Tired", image: tiredImage },
+  { name: "Frustrated", image: frustratedImage },
 ];
 
-// src/pages/FunSessionWelcomeHRD.js
-
-// --- 2. DATA MOCK STATISTIK MOOD AWAL (Real Time Data) ---
+/* ===== MOCK DATA ===== */
 const MOOD_STATISTICS_BEFORE = [
-    // Sesuaikan persentase ini agar terlihat berbeda, sesuai desain
-    { name: "Excited", percentage: 20 },   // Terlihat pendek di desain
-    { name: "Happy", percentage: 85 },    // Terlihat panjang
-    { name: "Neutral", percentage: 70 },  // Terlihat sedang
-    { name: "Sad", percentage: 35 },      // Terlihat sangat pendek
-    { name: "Tired", percentage: 90 },    // Terlihat paling panjang
-    { name: "Frustrated", percentage: 60 }, // Terlihat sedang
+  { name: "Energetic", percentage: 20 },
+  { name: "Happy", percentage: 85 },
+  { name: "Neutral", percentage: 70 },
+  { name: "Sad", percentage: 35 },
+  { name: "Tired", percentage: 90 },
+  { name: "Frustrated", percentage: 60 },
 ];
 
-// --- 3. DATA MOCK STATISTIK MOOD AKHIR (Real Time Data) ---
 const MOOD_STATISTICS_AFTER = [
-    // Sesuaikan persentase ini agar terlihat berbeda, sesuai desain
-    { name: "Excited", percentage: 95 },
-    { name: "Happy", percentage: 40 },
-    { name: "Neutral", percentage: 10 },
-    { name: "Sad", percentage: 5 },
-    { name: "Tired", percentage: 30 },
-    { name: "Frustrated", percentage: 50 },
+  { name: "Energetic", percentage: 95 },
+  { name: "Happy", percentage: 40 },
+  { name: "Neutral", percentage: 10 },
+  { name: "Sad", percentage: 5 },
+  { name: "Tired", percentage: 30 },
+  { name: "Frustrated", percentage: 50 },
 ];
 
+/* ===== COMPONENTS ===== */
 
-// --- Komponen Mood Card (Pasif & Highlighted) ---
-const MoodCard = ({ mood, isHighlighted, isCompact }) => {
-    const size = isCompact ? 100 : 120;
+const MoodCard = ({ mood, isHighlighted }) => (
+  <Card
+    className={`text-center mood-card mood-disabled ${
+      isHighlighted ? "mood-selected" : ""
+    }`}
+    style={{ width: 120, height: 120 }}
+  >
+    <Card.Body className="p-2 d-flex flex-column align-items-center justify-content-center">
+      <img
+        src={mood.image}
+        alt={mood.name}
+        style={{ width: 60, height: 60, objectFit: "contain" }}
+      />
+      <Card.Text className="small fw-semibold mt-2 mb-0">
+        {mood.name}
+      </Card.Text>
+    </Card.Body>
+  </Card>
+);
 
-    return (
-        <Card
-            className={`text-center mood-card mood-disabled ${isHighlighted ? "mood-selected" : ""}`}
-            style={{ width: size, height: size }}
-        >
-            <Card.Body className="p-2 d-flex flex-column align-items-center justify-content-center">
-                
-                <div className="mood-image-wrapper mb-2">
-                    <img
-                        src={mood.image}
-                        alt={mood.name}
-                        style={{
-                            width: size * 0.5,
-                            height: size * 0.5,
-                            objectFit: "contain"
-                        }}
-                    />
-                </div>
+const MoodProgressBar = ({ name, percentage }) => (
+  <Row className="align-items-center mb-3">
+    <Col xs={3} className="text-end small fw-semibold">
+      {name}
+    </Col>
+    <Col xs={7}>
+      <ProgressBar
+        now={percentage}
+        className="rounded-pill"
+        style={{ height: 10 }}
+      />
+    </Col>
+    <Col xs={2} className="small fw-bold">
+      {percentage}%
+    </Col>
+  </Row>
+);
 
-                <Card.Text className="small fw-semibold mb-0">
-                    {mood.name}
-                </Card.Text>
+/* ===== PAGE ===== */
 
-            </Card.Body>
-        </Card>
-    );
-};
-
-
-const MoodProgressBar = ({ name, percentage }) => {
-    const variant = "primary";
-
-    return (
-        <Row className="align-items-center mb-3">
-
-            {/* Mood label */}
-            <Col 
-                xs={3} 
-                sm={2} 
-                className="text-end small pe-2 fw-semibold"
-            >
-                {name}
-            </Col>
-
-            {/* Progress bar */}
-            <Col xs={7} sm={8} className="ps-0">
-            <div className="progress-bar-wrapper">
-                <ProgressBar
-                    now={percentage}
-                    style={{ height: '10px'}}
-                    variant={variant}
-                    className="rounded-pill"
-                />
-                </div>
-            </Col>
-
-            {/* Percentage */}
-            <Col 
-                xs={2} 
-                sm={2}
-                className="text-start small fw-bold ps-2"
-            >
-                {percentage}%
-            </Col>
-
-        </Row>
-    );
-};
-
-
-
-// --- Komponen Halaman Utama Fun Session HRD ---
 export default function FunSessionWelcomeHRD() {
-    // Simulasi status sesi: Active atau Finished
-    const [isSessionActive, setIsSessionActive] = useState(true);
-    const [notes, setNotes] = useState('');
+  const navigate = useNavigate();
+  const [isSessionActive, setIsSessionActive] = useState(true);
+  const [notes, setNotes] = useState("");
+  const [showFinishToast, setShowFinishToast] = useState(false);
 
-    const handleEndSession = () => {
-        if (window.confirm("Are you sure you want to end this session and finalize metrics?")) {
-            setIsSessionActive(false);
-            console.log("Session ended successfully. Final reports are now being generated.");
-        }
-    };
-    
-    // Asumsi mood dominan untuk meniru highlight di desain
-    const dominantMoodBefore = "Tired"; // Sesuai data 90%
-    const dominantMoodAfter = "Happy"; // Mengubah dari Energetic ke Happy sesuai gambar 19dd5d.jpg
+  const dominantMoodBefore = "Tired";
+  const dominantMoodAfter = "Happy";
 
-    return (
-        <>
-            <AppNavbar isLoggedIn={true} activePage="Fun Session" />
+  const handleFinishSession = () => {
+    setIsSessionActive(false);
+    setShowFinishToast(true);
 
-            <Container fluid className="mt-4 px-4 pb-5 fun-session-hrd-container">
-                
-                {/* Tombol Back ke FunSession List */}
-                <div className="mb-4">
-                    <Button 
-                        as={Link} 
-                        to="/funsession" 
-                        variant="link" // Gunakan link untuk tampilan yang lebih bersih
-                        className="p-0 mb-3 d-inline-flex align-items-center text-muted fw-semibold"
-                    >
-                    </Button>
-                    <h2 className="fw-bold mb-1">Welcome To Fun Session Today!</h2>
-                    <p className="text-muted fs-6">
-                        Real-Time Analytics for "Mind Stretch" Session (Hosted by Admin)
-                    </p>
-                </div>
+    // Ambil sesi terbaru dari localStorage (atau gunakan default dummy jika tidak ada)
+    let sessions = [];
+    try {
+      sessions = JSON.parse(localStorage.getItem('fun_sessions')) || [];
+    } catch (e) { sessions = []; }
 
-                {/* --- 1. How Are You Feeling Today? (View Only) --- */}
-                <div className="mt-5 pt-5">
-                    <div className="p-4 rounded-3 shadow mood-selection-box bg-light-blue">
-                        <h5 className="fw-semibold mb-4 text-center">How Are You Feeling Today?</h5>
-                        
-                        {/* Visualisasi Mood Awal */}
-                        <Row className="justify-content-center mb-4">
-                            {MOODS.map((mood) => (
-                                <Col key={mood.name} xs={4} sm={4} md={2} className="mb-3 d-flex justify-content-center">
-                                <MoodCard
-                                    key={mood.name}
-                                    mood={mood}
-                                    isHighlighted={mood.name === dominantMoodBefore}
-                                />
-                                </Col>
-                            ))}
-                        </Row>
+    // Cari sesi upcoming terbaru (dengan type 'upcoming')
+    const upcomingSessionIndex = sessions.findIndex(s => s.type === 'upcoming');
+    if (upcomingSessionIndex !== -1) {
+      // Ubah type menjadi 'past' dan update recap/feedback
+      const session = { ...sessions[upcomingSessionIndex] };
+      session.type = 'past';
+      session.recap = 'Sesi telah selesai. Semua peserta telah mengikuti Fun Session.';
+      session.feedback = 'Fun Session berjalan lancar dan bermanfaat.';
+      session.detailText = 'Sesi Fun Session telah selesai dan data telah dipindahkan ke riwayat.';
+      sessions[upcomingSessionIndex] = session;
+      localStorage.setItem('fun_sessions', JSON.stringify(sessions));
+    }
 
-                        {/* Grafik Mood Awal */}
-                        <div className="p-4 bg-white rounded-3 shadow-sm">
-                            <h6 className="fw-semibold mb-3">Employees Feeling Today</h6>
-                            {MOOD_STATISTICS_BEFORE.map((mood) => (
-                                <MoodProgressBar 
-                                    key={mood.name}
-                                    name={mood.name}
-                                    percentage={mood.percentage}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
+    // Setelah toast, redirect ke /funsession dan tab Past
+    setTimeout(() => {
+      setShowFinishToast(false);
+      navigate('/funsession?tab=past');
+    }, 1500);
+  };
 
-                {/* --- 2. Wanna Have Some Fun? (Status Session) --- */}
-                <div className="text-center mt-5">
-                    <h4 className="fw-bold mb-2">Wanna Have Some Fun?</h4>
-                    <p className="text-muted mb-4">
-                        Status: {isSessionActive ? "Currently Active" : "Concluded"}
-                    </p>
-                    <Button 
-                        variant={isSessionActive ? "danger" : "secondary"}
-                        size="lg" 
-                        className="fun-play-btn"
-                        onClick={handleEndSession}
-                        disabled={!isSessionActive}
-                    >
-                        {isSessionActive ? "Start Game" : "Session Concluded"}
-                    </Button>
-                    <p className="small text-muted mt-2">
-                        {isSessionActive ? "Click to manually end the session" : "Final reports are ready"}
-                    </p>
-                </div>
-                
+  return (
+    <>
+      <AppNavbar isLoggedIn={true} activePage="Fun Session" />
 
-                {/* --- 3. Welcome Back! (View Only) --- */}
-                <div className="mt-5 pt-5"> 
-                    <div className="p-4 rounded-3 shadow mood-selection-box bg-light-blue"> 
-                        <h4 className="fw-bold text-center mb-1">Welcome Back!</h4>
-                        <p className="text-center text-muted mb-4">How do you feel after playing games?</p>
+      <Container fluid className="mt-4 px-4 pb-5">
+        {/* HEADER */}
+        <div className="mb-4">
+          <h2 className="fw-bold mb-1">Welcome To Fun Session Today!</h2>
+          <p className="text-muted">
+            Real-Time Analytics for Mind Stretch Session
+          </p>
+        </div>
 
-                        {/* Visualisasi Mood Kedua */}
-                        <Row className="justify-content-center">
-                            {MOODS.map((mood) => (
-                                <Col key={mood.name} xs={4} sm={4} md={4} className="mb-3 d-flex justify-content-center"> 
-                                <MoodCard
-                                    key={mood.name}
-                                    mood={mood}
-                                    isHighlighted={mood.name === dominantMoodAfter}
-                                />
-                                </Col>
-                            ))}
-                        </Row>
+        {/* BEFORE */}
+        <div className="p-4 rounded-3 shadow-sm bg-light mb-5">
+          <h5 className="fw-semibold text-center mb-4">
+            How Are You Feeling Today?
+          </h5>
 
-                        {/* Grafik Mood Kedua */}
-                        <div className="p-4 bg-white rounded-3 shadow-sm">
-                            <h6 className="fw-semibold mb-3">Employees Feeling After Fun Session</h6>
-                            {MOOD_STATISTICS_AFTER.map((mood) => (
-                                <MoodProgressBar 
-                                    key={mood.name}
-                                    name={mood.name}
-                                    percentage={mood.percentage}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
+          <Row className="justify-content-center mb-4">
+            {MOODS.map((mood) => (
+              <Col
+                key={mood.name}
+                xs={4}
+                md={2}
+                className="d-flex justify-content-center mb-3"
+              >
+                <MoodCard
+                  mood={mood}
+                  isHighlighted={mood.name === dominantMoodBefore}
+                />
+              </Col>
+            ))}
+          </Row>
 
-                {/* --- 4. Notes (HRD Input/Review) --- */}
-                <div className="mt-5">
-                    <div className="p-4 rounded-3 shadow mood-selection-box bg-light-blue"> 
-                    <h4 className="fw-bold mb-3">Notes</h4>
-                    <Form.Control
-                        as="textarea"
-                        rows={4}
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        className="mb-4 shadow-sm"
-                        disabled={!isSessionActive} // Notes bisa diubah selama sesi aktif
-                    />
-                    </div>
-                    
-                    <div className="text-center mb-5 mt-4">
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            className="fun-finish-btn"
-                            disabled={!isSessionActive}
-                        >
-                            Finish Fun Session
-                        </Button>
-                    </div>   
-                </div>
+          <div className="p-4 bg-white rounded-3 shadow-sm">
+            <h6 className="fw-semibold mb-3">Employees Feeling Today</h6>
+            {MOOD_STATISTICS_BEFORE.map((mood) => (
+              <MoodProgressBar key={mood.name} {...mood} />
+            ))}
+          </div>
+        </div>
 
-            </Container>
-        </>
-    );
+        {/* INFO */}
+        <div className="fun-info-box mb-5">
+          <p className="fun-info-quote">
+            “Fun Session helps employees reset their mood and return to work with
+            better focus and emotional balance.”
+          </p>
+          <p className="fun-info-meta">
+            — Insight summary for HR & Management
+          </p>
+        </div>
+
+        {/* AFTER */}
+        <div className="p-4 rounded-3 shadow-sm bg-light mb-5">
+          <h4 className="fw-bold text-center mb-1">Welcome Back!</h4>
+          <p className="text-center text-muted mb-4">
+            How do employees feel after playing games?
+          </p>
+
+          <Row className="justify-content-center mb-4">
+            {MOODS.map((mood) => (
+              <Col
+                key={mood.name}
+                xs={4}
+                md={4}
+                className="d-flex justify-content-center mb-3"
+              >
+                <MoodCard
+                  mood={mood}
+                  isHighlighted={mood.name === dominantMoodAfter}
+                />
+              </Col>
+            ))}
+          </Row>
+
+          <div className="p-4 bg-white rounded-3 shadow-sm">
+            <h6 className="fw-semibold mb-3">
+              Employees Feeling After Fun Session
+            </h6>
+            {MOOD_STATISTICS_AFTER.map((mood) => (
+              <MoodProgressBar key={mood.name} {...mood} />
+            ))}
+          </div>
+        </div>
+
+        {/* NOTES */}
+        <div className="p-4 rounded-3 shadow-sm bg-light mb-4">
+          <h4 className="fw-bold mb-3">Notes</h4>
+          <Form.Control
+            as="textarea"
+            rows={4}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            disabled={!isSessionActive}
+          />
+        </div>
+
+        {/* FINISH */}
+        <div className="text-center mb-5">
+          <Button
+            variant="primary"
+            size="lg"
+            disabled={!isSessionActive}
+            onClick={handleFinishSession}
+          >
+            Finish Fun Session
+          </Button>
+        </div>
+      </Container>
+
+      {/* ===== TOAST ===== */}
+      <ToastContainer
+        position="bottom-center"
+        className="finish-toast-container p-3"
+      >
+        <Toast
+          show={showFinishToast}
+          onClose={() => setShowFinishToast(false)}
+          delay={3000}
+          autohide
+          className="finish-toast"
+        >
+          <Toast.Body className="d-flex align-items-center gap-3">
+            <div className="finish-toast-icon">✓</div>
+            <div>
+              <div className="finish-toast-title">Fun Session Finished</div>
+              <div className="finish-toast-text">
+                Session data has been finalized.
+              </div>
+            </div>
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+    </>
+  );
 }

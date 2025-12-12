@@ -349,6 +349,7 @@ export default function PenilaianKinerja() {
 
             {/* Modal Create/Edit */}
             <PerformanceModal
+                key={dataToEdit ? dataToEdit.id : 'new'}
                 show={showModal}
                 handleClose={handleCloseModal}
                 handleSubmit={handleSavePerformance}

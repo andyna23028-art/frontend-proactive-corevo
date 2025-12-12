@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Container, Button, Card, Row, Col, ButtonGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Clock, People, CalendarCheck, Lightbulb } from "react-bootstrap-icons";
@@ -144,8 +145,15 @@ const SessionCard = ({ session, onViewDetails, isSelected }) => {
 };
 
 export default function FunSession() {
+    const location = useLocation();
     const [filter, setFilter] = useState("upcoming");
-    const [sessions, setSessions] = useState(SESSIONS); // State untuk menyimpan daftar sesi
+    const [sessions, setSessions] = useState(() => {
+        try {
+            const stored = localStorage.getItem('fun_sessions');
+            if (stored) return JSON.parse(stored);
+        } catch (e) {}
+        return SESSIONS;
+    });
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     const [selectedPastSessionId, setSelectedPastSessionId] = useState(null); 
@@ -160,6 +168,19 @@ export default function FunSession() {
             setSelectedPastSessionId(sessionId);
         }
     };
+
+    // Sync sessions to localStorage on change
+    useEffect(() => {
+        localStorage.setItem('fun_sessions', JSON.stringify(sessions));
+    }, [sessions]);
+
+    // On mount, check for ?tab=past and set filter
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        if (params.get('tab') === 'past') {
+            setFilter('past');
+        }
+    }, [location.search]);
 
     const handleSaveNewSession = (newSession) => {
         // ... Logika penyesuaian format tanggal

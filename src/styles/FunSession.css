@@ -276,8 +276,8 @@
 
 .mood-card {
     cursor: pointer;
-    /* 1. Border default: Warna abu-abu/biru muda yang tipis dan terlihat */
-    border: 1px solid #e0e7ff; 
+    /* 1. Border default: Warna abu-abu tipis dan terlihat */
+    border: 1px solid #e5e7eb; 
     
     /* 2. Latar belakang default: Putih/transparan */
     background-color: white; 
@@ -345,16 +345,15 @@
 /* --- END LOGIKA PERSEGI --- */
 
 .mood-card:hover {
-    /* 3. Efek hover: Tambahkan sedikit bayangan */
-    box-shadow: 0 4px 10px rgba(0, 114, 255, 0.2); /* Bayangan biru muda halus */
-    /* Hapus perubahan warna background saat hover */
+    /* Hilangkan efek hover khusus agar warna tidak berubah */
+    box-shadow: none;
 }
 
 .mood-selected {
-    /* 4. Saat terpilih: Border biru solid dan latar belakang biru muda */
-    border: 1px solid #3b82f6 !important; /* Border biru utama */
-    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5) !important; /* Bayangan halus di sekitar border */
-    background-color: #BCDAFF !important; /* Latar belakang biru muda hanya saat terpilih */
+    /* Saat terpilih: border sama (abu-abu), hanya ada sedikit shadow */
+    border: 1px solid #e5e7eb !important; /* Border abu-abu utama */
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08) !important; /* Bayangan netral halus */
+    background-color: #ffffff !important; /* Tetap putih */
 }
 
 /* Pastikan konten di dalam Card.Body diletakkan di tengah */
@@ -371,10 +370,6 @@
     line-height: 1.2;
 }
 
-.mood-icon-placeholder {
-    /* (Tetap karena tidak digunakan setelah diganti <img>) */
-}
-
 .fun-play-btn {
     /* Gradasi warna tombol Play Games Now */
     background: linear-gradient(to right, #00C6FF, #0072FF);
@@ -388,4 +383,76 @@
     /* Sedikit perubahan saat hover */
     box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
 }
+
+.fun-info-box {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 28px;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 180, 255, 0.08),
+    rgba(0, 102, 255, 0.12)
+  );
+  text-align: center;
+}
+
+.fun-info-quote {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.fun-info-meta {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.finish-toast {
+    background: #bbf7d0; /* light green background */
+    border-radius: 999px;
+    min-width: 320px;
+    max-width: 640px;
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    box-shadow: 0 10px 30px rgba(15, 118, 110, 0.25);
+    color: #166534;
+}
+
+.finish-toast-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 2px solid #22c55e;
+    color: #22c55e;
+    background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.finish-toast-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #15803d;
+}
+
+.finish-toast-text {
+    font-size: 14px;
+    color: #166534;
+    opacity: 0.9;
+}
+
+.finish-toast-container {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: 16px !important;
+    transform: translateX(-50%);
+    z-index: 1080;
+}
+
 

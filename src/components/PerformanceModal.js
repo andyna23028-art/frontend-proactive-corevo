@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap'; // Import Row dan Col
 import { XLg, ChevronUp, ChevronDown } from 'react-bootstrap-icons'; 
 
@@ -34,29 +34,32 @@ const MAX_RATING = 5;
 
 export default function PerformanceModal({ show, handleClose, handleSubmit, initialData }) {
     
-    // 🌟 PERBAIKAN: Pastikan initialData memiliki semua field deskripsi saat edit
-    const [formData, setFormData] = useState(initialData || DEFAULT_FORM_DATA);
-    // 🌟 BARU: State untuk mengontrol pesan validasi
-    const [validated, setValidated] = useState(false);
-
-    // useEffect untuk mengisi form saat modal dibuka dalam mode Edit
-    useEffect(() => {
-        if (show) {
-            // Gabungkan initialData dengan DEFAULT_FORM_DATA untuk memastikan field deskripsi ada
-            setFormData({ ...DEFAULT_FORM_DATA, ...(initialData || {}) });
-            setValidated(false); // Reset validasi saat modal dibuka
+    // Initialize form data dengan initialData atau DEFAULT
+    const [formData, setFormData] = useState(() => {
+        if (initialData) {
+            return {
+                ...DEFAULT_FORM_DATA,
+                ...initialData,
+                goalAchievementDescription: initialData.goalAchievementDescription || '',
+                knowledgeSkillsDescription: initialData.knowledgeSkillsDescription || '',
+                behaviorWorkEthicDescription: initialData.behaviorWorkEthicDescription || '',
+                disciplineReliabilityDescription: initialData.disciplineReliabilityDescription || '',
+            };
         }
-    }, [show, initialData]);
+        return DEFAULT_FORM_DATA;
+    });
+    const [validated, setValidated] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ 
-            ...prev, 
-            // Parsing hanya untuk nilai rating, biarkan deskripsi sebagai string
-            [name]: name.includes('Value') ? parseInt(value) || 0 : name.includes('Description') ? value : name === 'employeeName' ? value : parseInt(value) || 0
-        }));
-        // Reset validasi saat input berubah
-        setValidated(false); 
+        setFormData(prev => {
+            // Only parseInt for the 4 numeric rating fields
+            if (['goalAchievement', 'knowledgeSkills', 'behaviorWorkEthic', 'disciplineReliability'].includes(name)) {
+                return { ...prev, [name]: parseInt(value) || 0 };
+            }
+            // For all other fields (descriptions, employeeName), keep as string
+            return { ...prev, [name]: value };
+        });
     };
 
     // 🌟 PERBAIKAN: Fungsi Spinner dengan batasan nilai 0 - 5
