@@ -14,80 +14,49 @@ const EMPLOYEE_OPTIONS = [
     { id: 8, name: 'Thomas Herve' },
 ];
 
-// Data Default untuk mode Create
-const DEFAULT_FORM_DATA = {
-    employeeName: '',
-    // Nilai Penilaian
-    goalAchievement: 0,
-    knowledgeSkills: 0,
-    behaviorWorkEthic: 0,
-    disciplineReliability: 0,
-    // 🌟 BARU: Deskripsi
-    goalAchievementDescription: '',
-    knowledgeSkillsDescription: '',
-    behaviorWorkEthicDescription: '',
-    disciplineReliabilityDescription: '',
-};
+// Data Default untuk mode Create (tidak digunakan lagi karena menggunakan state terpisah)
+// const DEFAULT_FORM_DATA = { ... }
 
 // 🌟 KONSTANTA: Batas maksimum nilai penilaian
 const MAX_RATING = 5; 
 
 export default function PerformanceModal({ show, handleClose, handleSubmit, initialData }) {
     
-    // Initialize form data dengan initialData atau DEFAULT
-    const [formData, setFormData] = useState(() => {
-        if (initialData) {
-            return {
-                ...DEFAULT_FORM_DATA,
-                ...initialData,
-                goalAchievementDescription: initialData.goalAchievementDescription || '',
-                knowledgeSkillsDescription: initialData.knowledgeSkillsDescription || '',
-                behaviorWorkEthicDescription: initialData.behaviorWorkEthicDescription || '',
-                disciplineReliabilityDescription: initialData.disciplineReliabilityDescription || '',
-            };
-        }
-        return DEFAULT_FORM_DATA;
-    });
+    // Gunakan state terpisah untuk setiap field - lebih stabil dan tidak re-render
+    const [employeeName, setEmployeeName] = useState(initialData?.employeeName || '');
+    const [goalAchievement, setGoalAchievement] = useState(initialData?.goalAchievement || 0);
+    const [knowledgeSkills, setKnowledgeSkills] = useState(initialData?.knowledgeSkills || 0);
+    const [behaviorWorkEthic, setBehaviorWorkEthic] = useState(initialData?.behaviorWorkEthic || 0);
+    const [disciplineReliability, setDisciplineReliability] = useState(initialData?.disciplineReliability || 0);
+    const [goalAchievementDescription, setGoalAchievementDescription] = useState(initialData?.goalAchievementDescription || '');
+    const [knowledgeSkillsDescription, setKnowledgeSkillsDescription] = useState(initialData?.knowledgeSkillsDescription || '');
+    const [behaviorWorkEthicDescription, setBehaviorWorkEthicDescription] = useState(initialData?.behaviorWorkEthicDescription || '');
+    const [disciplineReliabilityDescription, setDisciplineReliabilityDescription] = useState(initialData?.disciplineReliabilityDescription || '');
     const [validated, setValidated] = useState(false);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => {
-            // Only parseInt for the 4 numeric rating fields
-            if (['goalAchievement', 'knowledgeSkills', 'behaviorWorkEthic', 'disciplineReliability'].includes(name)) {
-                return { ...prev, [name]: parseInt(value) || 0 };
-            }
-            // For all other fields (descriptions, employeeName), keep as string
-            return { ...prev, [name]: value };
-        });
-    };
-
-    // 🌟 PERBAIKAN: Fungsi Spinner dengan batasan nilai 0 - 5
-    const handleSpinnerChange = (name, delta) => {
-        setFormData(prev => {
-            const currentValue = parseInt(prev[name]) || 0;
-            let newValue = currentValue + delta;
-            
-            // Batasi nilai minimum (0) dan maksimum (MAX_RATING = 5)
-            newValue = Math.max(0, Math.min(MAX_RATING, newValue)); 
-
-            return { ...prev, [name]: newValue };
-        });
-    };
-
-    // 🌟 PERBAIKAN: Menggunakan validasi Form Bootstrap
     const onSubmit = (e) => {
         e.preventDefault();
         const form = e.currentTarget;
         
-        // Cek validitas form native HTML5 (menggunakan atribut 'required')
         if (form.checkValidity() === false) {
             e.stopPropagation();
-            setValidated(true); // Tampilkan feedback validasi
+            setValidated(true);
             return;
         }
 
-        // Jika validasi sukses
+        // Kumpulkan semua data
+        const formData = {
+            employeeName,
+            goalAchievement,
+            knowledgeSkills,
+            behaviorWorkEthic,
+            disciplineReliability,
+            goalAchievementDescription,
+            knowledgeSkillsDescription,
+            behaviorWorkEthicDescription,
+            disciplineReliabilityDescription,
+        };
+
         handleSubmit(formData);
         handleClose();
     };
@@ -107,19 +76,18 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
         paddingRight: '40px', 
     };
     
-    // Komponen Input dengan Spinner dan Description 🌟 BARU
-    const RatingGroup = ({ labelValue, nameValue, value, labelDescription, nameDescription, description }) => (
+    // Komponen Input dengan Spinner dan Description
+    const RatingGroup = ({ labelValue, valueState, setValue, labelDescription, descriptionState, setDescription }) => (
         <Row className="mb-4">
             {/* Kolom Kiri untuk Nilai (Value) */}
             <Col md={6}>
-                <Form.Group className="mb-3" controlId={`form${nameValue}`}>
+                <Form.Group className="mb-3" controlId={`form${labelValue}`}>
                     <Form.Label className="fw-semibold text-dark">{labelValue}</Form.Label>
                     <div className="position-relative">
                         <Form.Control
                             type="number"
-                            name={nameValue}
-                            value={value}
-                            onChange={handleInputChange}
+                            value={valueState}
+                            onChange={(e) => setValue(parseInt(e.target.value) || 0)}
                             style={customInputStyle}
                             required 
                             min={0}
@@ -139,18 +107,23 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
                                 size={20} 
                                 className="text-primary cursor-pointer p-1" 
                                 style={{ cursor: 'pointer', lineHeight: '1', height: '20px' }}
-                                onClick={() => handleSpinnerChange(nameValue, 1)} 
+                                onClick={() => {
+                                    const newVal = Math.min(MAX_RATING, valueState + 1);
+                                    setValue(newVal);
+                                }}
                             />
                             
                             <ChevronDown 
                                 size={20} 
                                 className="text-primary cursor-pointer p-1" 
                                 style={{ cursor: 'pointer', lineHeight: '1', height: '20px', marginTop: '-15px' }}
-                                onClick={() => handleSpinnerChange(nameValue, -1)} 
+                                onClick={() => {
+                                    const newVal = Math.max(0, valueState - 1);
+                                    setValue(newVal);
+                                }}
                             />
                         </div>
                     </div>
-                    {/* Feedback Validasi hanya untuk input number */}
                     <Form.Control.Feedback type="invalid">
                         Nilai harus di antara 0 dan {MAX_RATING}.
                     </Form.Control.Feedback>
@@ -159,15 +132,14 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
 
             {/* Kolom Kanan untuk Deskripsi */}
             <Col md={6}>
-                <Form.Group className="mb-3" controlId={`form${nameDescription}`}>
+                <Form.Group className="mb-3" controlId={`form${labelDescription}`}>
                     <Form.Label className="fw-semibold text-dark">{labelDescription}</Form.Label>
                     <Form.Control 
                         as="textarea" 
-                        rows={3} // Atur jumlah baris
-                        name={nameDescription}
-                        value={description}
-                        onChange={handleInputChange}
-                        style={{ ...customInputStyle, height: 'auto', paddingRight: '10px' }} // Sesuaikan style untuk textarea
+                        rows={3}
+                        value={descriptionState}
+                        onChange={(e) => setDescription(e.target.value)}
+                        style={{ ...customInputStyle, height: 'auto', paddingRight: '10px' }}
                     />
                 </Form.Group>
             </Col>
@@ -203,9 +175,8 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
                     <Form.Group className="mb-4" controlId="formEmployeeName">
                         <Form.Label className="fw-semibold text-dark">Select Employee</Form.Label>
                         <Form.Select 
-                            name="employeeName"
-                            value={formData.employeeName}
-                            onChange={handleInputChange}
+                            value={employeeName}
+                            onChange={(e) => setEmployeeName(e.target.value)}
                             required
                             disabled={isEditMode} 
                             style={{ backgroundColor: '#eff6ff', borderRadius: '10px', border: 'none', height: '43px', fontSize: '1rem' }}
@@ -220,41 +191,41 @@ export default function PerformanceModal({ show, handleClose, handleSubmit, init
                         </Form.Control.Feedback>
                     </Form.Group>
 
-                    {/* Performance Metrics with Descriptions (Menggunakan komponen RatingGroup yang baru) */}
+                    {/* Performance Metrics with Descriptions */}
                     <RatingGroup 
                         labelValue="Goal Achievement Value" 
-                        nameValue="goalAchievement" 
-                        value={formData.goalAchievement} 
+                        valueState={goalAchievement}
+                        setValue={setGoalAchievement}
                         labelDescription="Description"
-                        nameDescription="goalAchievementDescription"
-                        description={formData.goalAchievementDescription}
+                        descriptionState={goalAchievementDescription}
+                        setDescription={setGoalAchievementDescription}
                     />
 
                     <RatingGroup 
                         labelValue="Behavior & Work Ethic Value" 
-                        nameValue="behaviorWorkEthic" 
-                        value={formData.behaviorWorkEthic} 
+                        valueState={behaviorWorkEthic}
+                        setValue={setBehaviorWorkEthic}
                         labelDescription="Description"
-                        nameDescription="behaviorWorkEthicDescription"
-                        description={formData.behaviorWorkEthicDescription}
+                        descriptionState={behaviorWorkEthicDescription}
+                        setDescription={setBehaviorWorkEthicDescription}
                     />
 
                     <RatingGroup 
                         labelValue="Knowledge & Skill Value" 
-                        nameValue="knowledgeSkills" 
-                        value={formData.knowledgeSkills} 
+                        valueState={knowledgeSkills}
+                        setValue={setKnowledgeSkills}
                         labelDescription="Description"
-                        nameDescription="knowledgeSkillsDescription"
-                        description={formData.knowledgeSkillsDescription}
+                        descriptionState={knowledgeSkillsDescription}
+                        setDescription={setKnowledgeSkillsDescription}
                     />
 
                     <RatingGroup 
                         labelValue="Discipline & Reliability Value" 
-                        nameValue="disciplineReliability" 
-                        value={formData.disciplineReliability} 
+                        valueState={disciplineReliability}
+                        setValue={setDisciplineReliability}
                         labelDescription="Description"
-                        nameDescription="disciplineReliabilityDescription"
-                        description={formData.disciplineReliabilityDescription}
+                        descriptionState={disciplineReliabilityDescription}
+                        setDescription={setDisciplineReliabilityDescription}
                     />
 
 

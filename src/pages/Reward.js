@@ -138,6 +138,7 @@ export default function Reward() {
     }
   };
 
+
   const RewardTypeCard = ({ icon, title, description, selected, onClick }) => {
     const cardStyle = {
       backgroundColor: '#eff6ff',
