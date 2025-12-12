@@ -333,16 +333,7 @@ const ProfileIP = () => {
                         )}
                     </div>
                     {/* Profile Actions */}
-                    {isEditing && (
-                        <div className="profile-actions profile-actions-custom">
-                            <button className="btn-base btn-secondary" onClick={handleCancelClick}>
-                                Cancel
-                            </button>
-                            <button className="btn-base btn-primary" onClick={handleSaveClick}>
-                                Save Changes
-                            </button>
-                        </div>
-                    )}
+                    {/* Profile Actions removed as requested */}
                 </section>
 
                 {/* Custom Toggle Tabs */}

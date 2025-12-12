@@ -1,4 +1,5 @@
 import React from 'react';
+import womanImg from '../images/woman.png';
 import { Navbar, Container, Nav, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Bell, Search } from 'react-bootstrap-icons';
@@ -107,18 +108,19 @@ const AppNavbar = ({ isLoggedIn, activePage }) => {
               </>
             )}
 
+
            {isLoggedIn && (
-  <Nav.Link as={Link} to="/profile" className="p-0">
-    <img
-      src="https://i.pravatar.cc/150?u=user"
-      alt="Profile"
-      className="rounded-circle border"
-      width="40"
-      height="40"
-      style={{ objectFit: 'cover' }}
-    />
-  </Nav.Link>
-)}
+              <Nav.Link as={Link} to="/profile" className="p-0">
+                <img
+                  src={womanImg}
+                  alt="Profile"
+                  className="rounded-circle border"
+                  width="40"
+                  height="40"
+                  style={{ objectFit: 'cover' }}
+                />
+              </Nav.Link>
+            )}
 
           </div>
         </Navbar.Collapse>
