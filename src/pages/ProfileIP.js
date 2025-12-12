@@ -3,6 +3,18 @@ import AppNavbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom"; // ✅ IMPORT useNavigate
 import '../styles/ProfileIP.css'; 
 
+// Import SVG icons for personal info
+import PhoneIcon from '../icons/phone.svg';
+import GmailIcon from '../icons/gmail.svg';
+
+import KalenderIcon from '../icons/kalender.svg';
+import LocationIcon from '../icons/location.svg';
+
+// Import kalender icon for all meta icons
+import kalenderIcon from '../icons/kalender.svg';
+import lokasiIcon from '../icons/location.svg';
+import departemenIcon from '../icons/people.svg';
+
 // Data Awal untuk Profil
 const initialProfileData = {
     name: "Mina Muadi",
@@ -196,7 +208,12 @@ const ProfileIP = () => {
                             />
                             {isEditing && <div className="upload-icon">📸</div>}
                         </div>
-                        <div className="emp-badge emp-badge-custom">{displayData.employeeId}</div>
+                        <div
+                            className="emp-badge"
+                            style={{ backgroundColor: "#EBF4FF", color: "#424242" }}
+                            >
+                            {displayData.employeeId}
+                            </div>
                     </div>
                     <div className="profile-main profile-main-custom">
                         <div className="profile-headline profile-headline-custom">
@@ -204,9 +221,15 @@ const ProfileIP = () => {
                             <p className="profile-position profile-position-custom">{displayData.position}</p>
                         </div>
                         <div className="profile-meta profile-meta-custom">
-                            <div className="profile-meta-item profile-meta-item-custom">{displayData.department && <span className="icon-meta">👥</span>} {displayData.department}</div>
-                            <div className="profile-meta-item profile-meta-item-custom">{displayData.location && <span className="icon-meta">📍</span>} {displayData.location}</div>
-                            <div className="profile-meta-item profile-meta-item-custom">{displayData.joinedDate && <span className="icon-meta">📅</span>} Joined {displayData.joinedDate}</div>
+                            <div className="profile-meta-item profile-meta-item-custom">
+                                {displayData.department && <span className="icon-meta"><img src={departemenIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>} {displayData.department}
+                            </div>
+                            <div className="profile-meta-item profile-meta-item-custom">
+                                {displayData.location && <span className="icon-meta"><img src={lokasiIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>} {displayData.location}
+                            </div>
+                            <div className="profile-meta-item profile-meta-item-custom">
+                                {displayData.joinedDate && <span className="icon-meta"><img src={kalenderIcon} alt="icon" style={{width: 18, height: 18, verticalAlign: 'middle'}} /></span>} Joined {displayData.joinedDate}
+                            </div>
                         </div>
                         <p className="profile-bio profile-bio-custom">{displayData.bio}</p>
                     </div>
@@ -262,13 +285,48 @@ const ProfileIP = () => {
 
                 {/* Konten Tab */}
                 {activeTab === "personal" && (
-                    <section className="info-card info-card-custom">
-                        <h3 className="info-title info-title-custom">Personal Information</h3>
-                        <div className="info-grid info-grid-custom">
-                            <ProfileInfoItem label="Email Address" icon="✉️" value={displayData.email} name="email" isEditing={isEditing} onChange={handleInputChange} />
-                            <ProfileInfoItem label="Phone Number" icon="📞" value={displayData.phone} name="phone" isEditing={isEditing} onChange={handleInputChange} />
-                            <ProfileInfoItem label="Date of Birth" icon="🎂" value={displayData.dob} name="dob" isEditing={isEditing} onChange={handleInputChange} />
-                            <ProfileInfoItem label="Location" icon="📍" value={displayData.location} name="location" isEditing={isEditing} onChange={handleInputChange} />
+                    <section className="info-card info-card-custom" style={{ border: '1px solid #2196f3', borderRadius: '20px', padding: '32px', maxWidth: 900, marginLeft: 0, marginRight: 'auto' }}>
+                        <h3 className="info-title info-title-custom" style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: 18, textAlign: 'left' }}>Personal Information</h3>
+                        <div className="personal-info-grid" style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: '20px 0',
+                            justifyItems: 'start',
+                            textAlign: 'left',
+                            marginLeft: 0,
+                        }}>
+                            {/* Email */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                                <img src={GmailIcon} alt="Email" style={{ width: 22, height: 22, marginTop: 2 }} />
+                                <div>
+                                    <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: 2 }}>Email Address</div>
+                                    <div style={{ color: '#757575', fontSize: '0.97rem' }}>{displayData.email}</div>
+                                </div>
+                            </div>
+                            {/* Phone */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                                <img src={PhoneIcon} alt="Phone" style={{ width: 22, height: 22, marginTop: 2 }} />
+                                <div>
+                                    <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: 2 }}>Phone Number</div>
+                                    <div style={{ color: '#757575', fontSize: '0.97rem' }}>{displayData.phone}</div>
+                                </div>
+                            </div>
+                            {/* Date of Birth */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                                <img src={KalenderIcon} alt="Date of Birth" style={{ width: 22, height: 22, marginTop: 2 }} />
+                                <div>
+                                    <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: 2 }}>Date of Birth</div>
+                                    <div style={{ color: '#757575', fontSize: '0.97rem' }}>{displayData.dob}</div>
+                                </div>
+                            </div>
+                            {/* Location */}
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                                <img src={LocationIcon} alt="Location" style={{ width: 22, height: 22, marginTop: 2 }} />
+                                <div>
+                                    <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: 2 }}>Location</div>
+                                    <div style={{ color: '#757575', fontSize: '0.97rem' }}>{displayData.location}</div>
+                                </div>
+                            </div>
                         </div>
                     </section>
                 )}
