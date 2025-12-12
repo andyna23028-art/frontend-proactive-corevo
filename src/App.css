@@ -1,0 +1,395 @@
+/* ===========================
+   REACT DEFAULT STYLES
+=========================== */
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===========================
+   FIX SPINNER INPUT NUMBER
+=========================== */
+
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* ===========================
+   HOME PAGE CUSTOM STYLES
+   (MIRIP FIGMA)
+=========================== */
+
+/* Greeting Title */
+.home-greeting-title {
+  font-size: 1.7rem;
+  letter-spacing: -0.3px;
+}
+
+/* Card besar (Manage Performance, Training Report, Unlock Wins, Fun Session) */
+.home-primary-card {
+  border-radius: 18px;
+  background: #f3f7ff; /* light blue */
+  padding: 8px !important;
+}
+
+/* Gradient button panjang */
+.home-gradient-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  font-size: 0.9rem;
+  background-image: linear-gradient(90deg, #007bff, #1e90ff);
+  color: #fff !important;
+}
+
+.home-gradient-btn:hover {
+  filter: brightness(1.05);
+}
+
+/* Let's Chat cards */
+.home-chat-card {
+  border-radius: 18px;
+  padding: 6px;
+}
+
+.home-chat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background-color: #f1f1f1;
+}
+
+/* Card kecil Fun Session di HOME */
+.home-session-inner-card {
+  border-radius: 18px;
+  background: #eaf2ff;
+  border: 1px solid #c9d9ff;
+}
+
+.home-session-checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 2px solid #1e90ff;
+  background-color: #1e90ff;
+}
+
+/* Tombol Start Session di HOME */
+.home-session-start-btn {
+  border-radius: 999px;
+  padding: 0.35rem 1.4rem;
+  font-size: 0.85rem;
+  background-color: #ffb534;
+  border-color: #ffb534;
+  color: #000 !important;
+}
+
+.home-session-start-btn:hover {
+  background-color: #ffa826;
+  border-color: #ffa826;
+  color: #000 !important;
+}
+
+/* ===========================
+   FUN SESSION PAGE (FIGMA STYLE)
+=========================== */
+
+/* Container supaya konten nggak nempel pinggir banget */
+.fun-session-container {
+  padding-bottom: 3rem;
+}
+
+/* Tombol Create New */
+.fun-create-btn {
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+/* Tab filter (Upcoming / Past Session) */
+.fun-tab-btn {
+  border-radius: 999px;
+  padding: 0.35rem 1.5rem;
+  font-size: 0.85rem;
+  border: 1px solid #007bff;
+  background-color: #ffffff;
+  color: #007bff;
+}
+
+.fun-tab-btn.active {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+/* Wrapper card list agar lebarnya mirip Figma (tidak full page) */
+.fun-card-wrapper {
+  max-width: 960px;
+}
+
+/* Card utama Fun Session */
+.fun-card {
+  border-radius: 18px;
+  background-color: #eaf4ff; /* biru muda seperti di Figma */
+}
+
+/* Icon lingkaran di kiri card */
+.fun-card-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #4c8dff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+/* Tombol Start Session (orange pill) */
+.fun-start-btn {
+  border-radius: 999px;
+  padding: 0.35rem 1.6rem;
+  font-size: 0.85rem;
+  background-color: #ffb534;
+  border-color: #ffb534;
+  color: #000000;
+}
+
+.fun-start-btn:hover {
+  background-color: #ffa826;
+  border-color: #ffa826;
+  color: #000000;
+}
+
+/* ===========================
+   FUN SESSION CREATE (FIGMA)
+=========================== */
+
+/* Backdrop agar card Create mengambang di tengah halaman Fun Session */
+.fun-create-backdrop {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.4); /* tipis aja biar mirip Figma */
+  z-index: 1050; /* di atas navbar & konten lain */
+}
+
+.fun-create-wrapper {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 2px solid #d8e7ff;
+  padding: 40px 50px;
+  max-width: 900px;
+  width: 100%;
+  background-color: #f7fbff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Label form */
+.fun-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Input / textarea biru muda */
+.fun-input {
+  background: #eef5ff !important;
+  border: 1px solid #c8ddff !important;
+  padding: 12px 14px !important;
+  border-radius: 10px !important;
+  font-size: 0.9rem !important;
+}
+
+.fun-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(76, 141, 255, 0.25);
+}
+
+/* Tombol Cancel & Save */
+.fun-btn-cancel {
+  border-radius: 8px !important;
+  padding: 8px 18px !important;
+  font-weight: 600 !important;
+}
+
+.fun-btn-save {
+  background: #007bff !important;
+  border-color: #007bff !important;
+  border-radius: 8px !important;
+  padding: 8px 28px !important;
+  font-weight: 600 !important;
+}
+
+.fun-btn-save:hover {
+  background: #005fd4 !important;
+  border-color: #005fd4 !important;
+}
+
+/* ===========================
+   REWARD PAGE (LAYOUT)
+=========================== */
+
+/* ruang bawah dikit biar napas */
+.reward-container {
+  padding-bottom: 3rem;
+}
+
+/* tombol Give Reward kanan atas */
+.reward-give-btn {
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+/* card tipe reward kiri (biru lembut) */
+.reward-type-card {
+  border-radius: 18px;
+  background: #eaf4ff;
+}
+
+.reward-type-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: #4c8dff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.4rem;
+}
+
+/* card recent employees (abu lembut) */
+.reward-recent-card {
+  border-radius: 18px;
+  background: #f5f7fb;
+}
+
+/* avatar bulat dummy */
+.reward-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9ca3af, #e5e7eb);
+}
+
+/* ===========================
+   REWARD POPUP (FIGMA STYLE)
+=========================== */
+
+/* LAYER belakang modal — tidak gelap, hanya pudar */
+.reward-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.55); /* background Figma */
+  backdrop-filter: blur(2px);            /* blur lembut */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 900;   /* di atas konten normal, di bawah modal */
+}
+
+/* Modal wrapper */
+.reward-modal-wrapper {
+  width: 100%;
+  max-width: 720px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 2px solid #d8e7ff;
+  padding: 35px 40px;
+  background-color: #f7fbff;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 999;    /* lebih tinggi dari backdrop */
+}
+
+/* Form label style */
+.reward-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+/* Input/select/textarea biru muda */
+.reward-input {
+  background: #eef5ff !important;
+  border: 1px solid #c8ddff !important;
+  border-radius: 10px !important;
+  padding: 12px !important;
+  font-size: 0.9rem !important;
+}
+
+.reward-input:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(76, 141, 255, 0.3);
+}
+
+/* Buttons */
+.reward-btn-cancel {
+  border-radius: 8px !important;
+  padding: 8px 20px !important;
+  font-weight: 600 !important;
+  background: white !important;
+  border: 1px solid #d1d5db !important;
+}
+
+.reward-btn-save {
+  border-radius: 8px !important;
+  padding: 8px 26px !important;
+  font-weight: 600 !important;
+  background: #007bff !important;
+  border-color: #007bff !important;
+}
+
+.reward-btn-save:hover {
+  background: #005fd4 !important;
+}
+
+/* Agar dropdown Select tidak terpotong modal */
+.reward-input,
+.reward-input * {
+  z-index: 2000 !important;
+}

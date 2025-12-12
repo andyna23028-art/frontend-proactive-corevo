@@ -1,0 +1,391 @@
+/* Styling untuk FunSession.js */
+
+/* Style untuk tombol tab filter */
+
+/* Container utama untuk efek pil/kapsul */
+.fun-toggle-container {
+    display: flex;
+    position: relative;
+    background-color: #3b82f6; /* Background sangat terang jika tidak aktif, opsional */
+    border-radius: 50px; /* Membuat bentuk pill */
+    padding: 2px; /* Ruang sedikit di sekitar tombol */
+    width: 240px; /* Sesuaikan lebar total toggle */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Bayangan opsional */
+}
+
+/* Item tab (Upcoming/Past Session) */
+.fun-tab-item {
+    flex: 1; /* Agar membagi rata lebar container */
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    z-index: 10; /* Penting agar teks berada di atas slider */
+    transition: color 0.3s ease;
+    color: #3b82f6; /* Warna teks default (biru muda) */
+    white-space: nowrap;
+}
+
+/* Teks tombol yang sedang TIDAK aktif (berwarna biru) */
+.fun-tab-item:not(.active) {
+    color: white; 
+}
+
+/* Teks tombol yang sedang aktif (berwarna putih) */
+.fun-tab-item.active {
+    color: #3b82f6; 
+}
+
+/* SLIDER / BACKGROUND BIRU YANG BERGERAK */
+.fun-toggle-slider {
+    position: absolute;
+    top: 2px;
+    height: calc(100% - 5px); /* Dikurangi 2px padding atas dan 2px bawah */
+    width: calc(50% - 5px); /* 50% lebar dari container, dikurangi sedikit */
+    background-color: #ffffff; /* Warna biru solid */
+    border-radius: 50px; /* Harus sama dengan container */
+    transition: transform 0.3s ease; /* Transisi agar efek geser terlihat mulus */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Posisi Slider ketika filter = upcoming (default) */
+.fun-toggle-slider.upcoming {
+    transform: translateX(0);
+}
+
+/* Posisi Slider ketika filter = past */
+.fun-toggle-slider.past {
+    transform: translateX(100%); /* Geser sejauh 100% dari lebarnya */
+}
+
+/* Style untuk Session Card */
+.fun-card {
+    border-radius: 12px;
+    max-width: 600px; /* Batasan lebar untuk meniru Figma */
+    margin-left: 0; /* Tengah */
+}
+
+.fun-card-icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #eff6ff; /* Blue-50 */
+    color: #3b82f6; /* Blue-500 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Style untuk tombol Start Session */
+.fun-start-btn {
+    background-color: #f59e0b; /* Amber/Orange */
+    border-color: #f59e0b;
+    color: white;
+}
+
+.fun-start-btn:hover {
+    background-color: #d97706; /* Amber/Orange gelap */
+    border-color: #d97706;
+}
+
+/* Ikon Custom (Jika Anda menggunakan ikon dari Font, pastikan font tersebut diimpor secara global) */
+/* .bi-chat-dots::before {
+    content: "\f222"; 
+    font-family: 'bootstrap-icons' !important;
+    font-size: 24px;
+} */
+
+/* Pembungkus utama untuk daftar kartu sesi agar tidak terlalu lebar */
+.fun-card-wrapper {
+    max-width: 650px; /* Batasan lebar untuk meniru lebar konten di Figma/Desain */
+    
+}
+
+/* --- Styling Khusus Modal Create Fun Session --- */
+
+/* Latar belakang input form agar berwarna biru muda */
+.custom-form-control {
+    background-color: #EBF4FF !important; /* Biru muda yang terlihat di desain */
+    border: 1px solid #e5e7eb; /* Border lebih soft */
+    box-shadow: none !important; /* Hapus bayangan default */
+    border-radius: 8px; /* Sudut lebih lembut */
+}
+
+/* Style untuk menyatukan Date dan Time input fields */
+.fun-datetime-group {
+    /* Pastikan tidak ada gap antar elemen */
+    gap: 0; 
+}
+
+/* Date input: Hapus border kanan agar menyatu dengan Time input */
+.fun-datetime-group .fun-date-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none; /* Hilangkan border pemisah */
+}
+
+/* Time input: Hapus border kiri agar menyatu dengan Date input */
+.fun-datetime-group .fun-time-input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    /* Tambahkan border kanan agar garis akhir terlihat utuh */
+    border-left: 1px solid #e5e7eb !important; 
+    /* Sesuaikan agar elemen date dan time membagi lebar secara proporsional */
+    flex-grow: 1;
+}
+
+/* Style tombol Save agar lebih panjang dan menonjol */
+.modal-footer .btn-primary {
+    padding: 8px 30px; 
+    font-weight: 600;
+}
+
+/* Style tombol Cancel */
+.modal-footer .btn-outline-secondary {
+    border-color: #d1d5db;
+    color: #4b5563;
+}
+
+/* --- LEBAR KHUSUS UNTUK DATE & TIME --- */
+/* (70% untuk Date, 30% untuk Time) */
+.w-70-percent {
+    flex: 0 0 70%; /* Tetapkan lebar 70% */
+    max-width: 70%;
+}
+
+.w-30-percent {
+    flex: 0 0 30%; /* Tetapkan lebar 30% */
+    max-width: 30%;
+}
+
+
+/* --- PENYEMBUNYIAN & PENGGANTIAN IKON --- */
+
+/* 1. Hilangkan ikon jam bawaan dari input time (khusus browser WebKit/Chrome/Safari) */
+.hide-time-icon::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* 2. Ganti ikon kalender bawaan (di input date) menjadi ikon jam */
+/* Kita harus menggunakan pseudo-element dan menyembunyikan ikon kalender aslinya */
+.fun-date-input::-webkit-calendar-picker-indicator {
+    /* Sembunyikan ikon kalender bawaan */
+    opacity: 0; 
+    width: 20px; /* Pertahankan lebar agar ikon jam kustom bisa diletakkan di tempatnya */
+    position: absolute;
+    right: 10px;
+}
+
+/* Tambahkan Ikon Jam Kustom pada Input Tanggal */
+.fun-date-input {
+    /* Tetapkan posisi relatif agar pseudo-element bisa diposisikan absolut */
+    position: relative; 
+}
+
+/* Tambahkan Ikon Jam (Unicode) sebagai pengganti Ikon Kalender */
+.fun-date-input::after {
+    /* Unicode untuk jam/waktu (Clockwise Down Arrow and Up Arrow) */
+    content: '\231A'; /* Simbol jam (Clock) - Alternatif: \23F1 (Timer) */
+    font-size: 1.2em;
+    color: #4b5563; /* Warna ikon (abu-abu gelap) */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none; /* Penting agar klik masih mengaktifkan kalender */
+    z-index: 5;
+}
+
+/* src/styles/FunSession.css - Tambahkan di akhir file */
+
+/* --- Styling Khusus Halaman FunSessionWelcome --- */
+
+.mood-card {
+    cursor: pointer;
+    border: 2px solid transparent; /* Border default transparan */
+    transition: all 0.2s ease;
+    border-radius: 12px;
+}
+
+.mood-card:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.mood-selected {
+    border-color: #3b82f6 !important; /* Biru ketika terpilih */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+}
+
+.mood-icon-placeholder {
+    /* Ganti ini dengan styling gambar Anda */
+}
+
+.fun-play-btn {
+    /* Gradasi warna tombol Play Games Now */
+    background: linear-gradient(to right, #00C6FF, #0072FF);
+    border: none;
+    font-weight: 600;
+    padding: 12px 40px;
+    border-radius: 15px;
+}
+
+.fun-play-btn:hover {
+    /* Sedikit perubahan saat hover */
+    box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+}
+
+/* Style untuk Notifikasi Toast Join Session (Employee) */
+.notification-toast {
+    /* Diatur di FunSessionEmployee.js (style inline) */
+}
+
+/* Style untuk Notifikasi Mood (FunSessionWelcome) */
+.mood-toast {
+     /* Diatur di FunSessionWelcome.js (style inline) */
+}
+
+/* KELAS BARU: Pembatas lebar container luar agar sesuai dengan desain */
+.mood-selection-box-wrapper {
+    max-width: 850px; /* Lebar maksimal sesuai contoh gambar */
+    margin: 0 auto; /* Tengah */
+    padding: 0 !important; /* Hapus padding agar kontrol penuh pada .mood-selection-box */
+    box-shadow: none !important; /* Hapus bayangan (jika ada) */
+}
+
+/* Container besar untuk pemilihan mood (How Are You Feeling Today?) */
+.mood-selection-box {
+    /* Menggunakan background biru muda yang terlihat di desain */
+    background-color: #EBF4FF; 
+    border: 1px solid #e0e7ff; /* Border biru muda yang sangat tipis */
+    border-radius: 12px;
+    padding: 30px 10px !important;
+    width: 100%; 
+    height: auto; 
+}
+
+.mood-selection-inner-card {
+    /* Latar belakang putih atau biru muda yang lebih terang */
+    background-color: white; 
+    /* Atur lebar maksimal agar tidak terlalu lebar di dalam kotak biru */
+    max-width: 690px; 
+    margin: 0 auto; /* Tengah */
+    border: 1px solid #e0e7ff; /* Border halus */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* Bayangan sedikit untuk menonjolkan */
+}
+
+.mood-card {
+    cursor: pointer;
+    /* 1. Border default: Warna abu-abu/biru muda yang tipis dan terlihat */
+    border: 1px solid #e0e7ff; 
+    
+    /* 2. Latar belakang default: Putih/transparan */
+    background-color: white; 
+    
+    transition: all 0.2s ease;
+    border-radius: 12px;
+    height: 100%; /* Pastikan semua card dalam row memiliki tinggi yang sama */
+}
+
+/* KELAS BARU: Mengatur ukuran Card agar lebih kecil dan persegi */
+.mood-card-compact {
+    /* Mengatur dimensi Card agar lebih ringkas (persegi/sisi x sisi) */
+    width: 120px; /* Ambil lebar penuh kolom (misal 1/6) */
+    height: 120px; /* Batasi tinggi Card agar menjadi persegi (sisi x sisi) */
+    
+    /* Penting: Tampilkan card di tengah kolom */
+    margin-left: auto;
+    margin-right: auto;
+
+    /* Hilangkan padding internal default Bootstrap */
+    padding: 0;
+    
+    max-width: none;
+    max-height: none;
+}
+
+.mood-card-compact .card-body {
+    /* Padding di Card.Body juga diperkecil */
+    padding: 12px 5px !important; /* Contoh padding yang lebih kecil */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Agar konten mengisi penuh card */
+}
+
+.mood-image-wrapper {
+    /* Sesuaikan margin di bawah gambar */
+    margin-bottom: 5px !important; 
+}
+
+/* --- LOGIKA UNTUK MEMBUAT KARTU MENJADI PERSEGI --- */
+
+.mood-card-inner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px; /* Sesuaikan padding agar konten tidak terlalu mepet */
+}
+
+/* Wrapper yang memaksa konten di dalamnya (gambar) menjadi persegi */
+
+.mood-card-fixed {
+    /* Batasi lebar maksimum Card agar tidak terlalu besar di desktop */
+    max-width: 120px; 
+    /* Batasi tinggi agar tidak terlalu panjang ke bawah. Sesuaikan nilainya. */
+    max-height: 120px; 
+    
+    /* Penting: Tampilkan card di tengah kolom */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- END LOGIKA PERSEGI --- */
+
+.mood-card:hover {
+    /* 3. Efek hover: Tambahkan sedikit bayangan */
+    box-shadow: 0 4px 10px rgba(0, 114, 255, 0.2); /* Bayangan biru muda halus */
+    /* Hapus perubahan warna background saat hover */
+}
+
+.mood-selected {
+    /* 4. Saat terpilih: Border biru solid dan latar belakang biru muda */
+    border: 1px solid #3b82f6 !important; /* Border biru utama */
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5) !important; /* Bayangan halus di sekitar border */
+    background-color: #BCDAFF !important; /* Latar belakang biru muda hanya saat terpilih */
+}
+
+/* Pastikan konten di dalam Card.Body diletakkan di tengah */
+.mood-card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pastikan tidak ada margin bawah pada Card.Text */
+.mood-card .card-text {
+    margin-bottom: 0 !important;
+    line-height: 1.2;
+}
+
+.mood-icon-placeholder {
+    /* (Tetap karena tidak digunakan setelah diganti <img>) */
+}
+
+.fun-play-btn {
+    /* Gradasi warna tombol Play Games Now */
+    background: linear-gradient(to right, #00C6FF, #0072FF);
+    border: none;
+    font-weight: 600;
+    padding: 12px 40px;
+    border-radius: 15px;
+}
+
+.fun-play-btn:hover {
+    /* Sedikit perubahan saat hover */
+    box-shadow: 0 4px 15px rgba(0, 114, 255, 0.4);
+}
+
